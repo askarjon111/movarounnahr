@@ -1,0 +1,191 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | SMS Gateway</title>
+{% endblock title %}
+{% block css %}
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+    <!-- Vendors Style-->
+
+{% endblock css %}
+{% block content %}
+    <!-- Main content -->
+    <form action="{% url 'smsgatewayf' %}" method="post">
+        <section class="content">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger">
+                            {{ message }}</div>
+                    {% endif %}
+                    {% if message.tags == "success" %}
+                        <div class="alert alert-success">
+                            {{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-6 col-lg-6">
+                    <div class="box" style="border:1px solid #3f7bff; border-radius: 5px;">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Lead status</h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="demo-checkbox">
+                                {% for lead_status_type in lead_status_types %}
+                                    <input onchange="checkers(this, {{ lead_status_type.0 }})" type="checkbox"
+                                           value="{{ lead_status_type }}"
+                                           id="md_checkbox_{{ lead_status_type.0 }}"
+                                           class="chk-col-primary">
+                                    <label for="md_checkbox_{{ lead_status_type.0 }}"
+                                           style="margin-bottom: 5px">{{ lead_status_type.1 }}</label>
+                                {% endfor %}
+                            </div>
+                            <div style="padding: 10px">
+                                <span style="color: #8a99b5; font-size: 18px; padding: 10px">Jami: {{ lead_count }} ta lead.</span>
+                                <span style="color: #8a99b5; font-size: 18px; padding: 10px">Filtrlandi <span
+                                        id="check_result">0</span> ta</span>
+                                <button onclick="check_filtered_lead_count()" type="button" class="btn btn-primary">
+                                    Tekshirish
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="box" style="border:1px solid #3f7bff; border-radius: 5px;">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Leadlar</h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <select class="form-control select2" multiple="multiple" id="leads" name="leads"
+                                        data-placeholder="Leadlarni tanlash"
+                                        style="width: 100%;">
+                                    {% for l in leads %}
+                                        <option value="{{ l.id }}">{{ l.surname|default_if_none:"" }} {{ l.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="user_type" id="user_type">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="box">
+
+                        <div class="box-header with-border">
+                            <h4 class="box-title">SMS Gateway</h4>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            {% csrf_token %}
+                            <div class="demo-checkbox">
+                                <div class="form-group">
+                                    <label>Xabar</label>
+                                    <textarea rows="5" cols="5" class="form-control" name="sms"
+                                              placeholder="" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-rounded btn-success pull-right">Jo'natish</button>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </form>
+{% endblock content %}
+{% block js %}
+    <!-- Vendor JS -->
+    <script src="{% static 'crm/main/js/vendors.min.js' %}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'crm/main/js/pages/advanced-form-element.js' %}"></script>
+
+    <!-- Sunny Admin App -->
+    <script src="{% static 'crm/main/js/template.js' %}"></script>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        Array.prototype.remove = function () {
+            var what, a = arguments, L = a.length, ax;
+            while (L && this.length) {
+                what = a[--L];
+                while ((ax = this.indexOf(what)) !== -1) {
+                    this.splice(ax, 1);
+                }
+            }
+            return this;
+        };
+        let checked_list = [];
+
+        function checkers(obj, value) {
+            checked_list.remove(value)
+            if (obj.checked) checked_list.push(value)
+            document.getElementById('user_type').value = JSON.stringify(checked_list)
+        }
+
+        function check_filtered_lead_count() {
+            $.ajax({
+                type: "POST",
+                url: '{% url "get_lead_count" %}',
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                data: {
+                    status: JSON.stringify(checked_list),
+                    user: {{ user.id }}
+                },
+                success: function (response) {
+                    document.getElementById('check_result').innerText = response.count
+                },
+                error: function (error) {
+                }
+            });
+        }
+    </script>
+
+{% endblock js %}

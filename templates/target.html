@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Pipeline</title>
+{% endblock title %}
+{% block css %}
+	<!-- Vendors Style-->
+	<link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+	  
+	<!-- Style-->  
+	<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+	<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+
+	<!-- Style-->
+{% endblock css %}
+{% block content %}
+
+		<!-- Main content -->
+		<section class="content">
+
+		  <div class="row">
+            <div class="col-6">
+            {% if messages %}
+                {% for message in messages %}
+                    <span style="color: green">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="col-6">
+                <a href="{% url 'adduser' %}" class="btn btn-rounded btn-success float-right" style="margin-bottom: 10px;">Qo'shish</a>
+            </div>
+			<div class="col-12">
+			  <div class="box">
+				<div class="box-body" style="padding: 0.5rem 0.5rem">
+					<!-- Nav tabs -->
+					<ul class="nav nav-pills rounded nav-justified">
+                        <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false">Tashrif buyuruvchi | {{ lead0_count }}</a></li>
+						<li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="true">Leads | {{ lead_count }}</a> </li>
+						<li class="nav-item"> <a href="#navpills-3" class="nav-link" data-toggle="tab" aria-expanded="true">Clients | {{ mijoz_count }}</a> </li>
+						<li class="nav-item"> <a href="#navpills-4" class="nav-link" data-toggle="tab" aria-expanded="true">Promouters | {{ promouter_count }}</a> </li>
+					</ul>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			  <div class="box">
+				<div class="box-body" style="padding: 0">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div id="navpills-1" class="tab-pane active">
+							<div class="col-12" style="padding: 0">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>№</th>
+                                                    <th>Familiya</th>
+                                                    <th>Ism</th>
+                                                    <th>Tug'ilgan sana</th>
+                                                    <th>Manzil</th>
+                                                    <th>Telefon</th>
+{#                                                    <th>Daraja</th>#}
+{#                                                    <th>Qanday maxsulot yoqishi</th>#}
+                                                    <th>ABC</th>
+{#                                                    <th>Vaziyat (ma`lumot to`plash)</th>#}
+{#                                                    <th>Muammo (ular boshdan kechirgan og`riq va muammolarni aniqlang)</th>#}
+{#                                                    <th>Imkoniyat (bu og`riqlarni nima uchun hal qilish kerakligini ta`kidlang)</th>#}
+{#                                                    <th>To'lov (ularni o`zlari shunday xulosa chiqarishga undang)</th>#}
+{#                                                    <th>Xulosa (Yopiq/Ochiq)</th>#}
+{#                                                    <th>Mijozga o'tkazish</th>#}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for t in lead0 %}
+                                                    <tr class="text-center">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{% if t.surname is not None %}<a href="{% url 'edit' %}?id={{ t.id }}">{{ t.surname }}</a>{% else %}{% endif %}</td>
+                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}">{{ t.name }}</a></td>
+                                                        <td>{{ t.birthday|date:'d.m.Y' }}</td>
+                                                        <td>{% if t.district is not None %}{{ t.district.region.name }}  {{ t.district }}  {% else %}{% endif %}</td>
+                                                        <td>{% if t.phone is not None %}{{ t.phone }}{% else %}{% endif %}</td>
+{#                                                        {% if t.degree == 1 %}#}
+{#                                                            <td>Past</td>#}
+{#                                                        {% elif t.degree == 2 %}#}
+{#                                                            <td>O`rta</td>#}
+{#                                                        {% else %}#}
+{#                                                            <td>Yuqori</td>#}
+{#                                                        {% endif %}#}
+{#                                                        <td>{% for i in t.categoryproduct.all %} {{ i }}, {% endfor %}</td>#}
+                                                        <td>{% if t.abcxyz is not None %}{{ t.abcxyz }}{% else %}{% endif %}</td>
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=1">{% if t.step1 == "" %}-{% else %}{{ t.step1 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=2">{% if t.step2 == "" %}-{% else %}{{ t.step2 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=3">{% if t.step3 == "" %}-{% else %}{{ t.step3 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=4">{% if t.step4 == "" %}-{% else %}{{ t.step4 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=5">{% if t.step5 == "" %}-{% else %}{{ t.step5 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'up' %}?id={{ t.id }}&s=3" class="waves-effect waves-light btn btn-primary btn-circle mx-5"><span class="mdi mdi-arrow-right"></span></a></td>#}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                              <!-- /.box -->
+                            </div>
+						</div>
+						<div id="navpills-2" class="tab-pane">
+							<div class="col-12" style="padding: 0">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table id="example11" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>№</th>
+                                                    <th>Familiya</th>
+                                                    <th>Ism</th>
+                                                    <th>Tug'ilgan sana</th>
+                                                    <th>Manzil</th>
+                                                    <th>Telefon</th>
+{#                                                    <th>Daraja</th>#}
+{#                                                    <th>Qanday maxsulot yoqishi</th>#}
+                                                    <th>ABC</th>
+{#                                                    <th>Vaziyat (ma`lumot to`plash)</th>#}
+{#                                                    <th>Muammo (ular boshdan kechirgan og`riq va muammolarni aniqlang)</th>#}
+{#                                                    <th>Imkoniyat (bu og`riqlarni nima uchun hal qilish kerakligini ta`kidlang)</th>#}
+{#                                                    <th>To'lov (ularni o`zlari shunday xulosa chiqarishga undang)</th>#}
+{#                                                    <th>Xulosa (Yopiq/Ochiq)</th>#}
+{#                                                    <th>Mijozga o'tkazish</th>#}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for t in lead %}
+                                                    <tr class="text-center">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{% if t.surname is not None %}<a href="{% url 'edit' %}?id={{ t.id }}">{{ t.surname }}</a>{% else %}{% endif %}</td>
+                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}">{{ t.name }}</a></td>
+                                                        <td>{{ t.birthday|date:'d.m.Y' }}</td>
+                                                        <td>{% if t.district is not None %}{{ t.district.region.name }}  {{ t.district }}  {% else %}{% endif %}</td>
+                                                        <td>{% if t.phone is not None %}{{ t.phone }}{% else %}{% endif %}</td>
+{#                                                        {% if t.degree == 1 %}#}
+{#                                                            <td>Past</td>#}
+{#                                                        {% elif t.degree == 2 %}#}
+{#                                                            <td>O`rta</td>#}
+{#                                                        {% else %}#}
+{#                                                            <td>Yuqori</td>#}
+{#                                                        {% endif %}#}
+{#                                                        <td>{% for i in t.categoryproduct.all %} {{ i }}, {% endfor %}</td>#}
+                                                        <td>{% if t.abcxyz is not None %}{{ t.abcxyz }}{% else %}{% endif %}</td>
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=1">{% if t.step1 == "" %}-{% else %}{{ t.step1 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=2">{% if t.step2 == "" %}-{% else %}{{ t.step2 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=3">{% if t.step3 == "" %}-{% else %}{{ t.step3 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=4">{% if t.step4 == "" %}-{% else %}{{ t.step4 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=5">{% if t.step5 == "" %}-{% else %}{{ t.step5 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'up' %}?id={{ t.id }}&s=3" class="waves-effect waves-light btn btn-primary btn-circle mx-5"><span class="mdi mdi-arrow-right"></span></a></td>#}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                              <!-- /.box -->
+                            </div>
+						</div>
+						<div id="navpills-3" class="tab-pane">
+							<div class="col-12" style="padding: 0">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table id="example111" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>№</th>
+                                                    <th>Familiya</th>
+                                                    <th>Ism</th>
+                                                    <th>Tug'ilgan sana</th>
+                                                    <th>Manzil</th>
+                                                    <th>Telefon</th>
+{#                                                    <th>Daraja</th>#}
+{#                                                    <th>Qanday maxsulot yoqishi</th>#}
+                                                    <th>ABC</th>
+{#                                                    <th>Vaziyat (ma`lumot to`plash)</th>#}
+{#                                                    <th>Muammo (ular boshdan kechirgan og`riq va muammolarni aniqlang)</th>#}
+{#                                                    <th>Imkoniyat (bu og`riqlarni nima uchun hal qilish kerakligini ta`kidlang)</th>#}
+{#                                                    <th>To'lov (ularni o`zlari shunday xulosa chiqarishga undang)</th>#}
+{#                                                    <th>Xulosa (Yopiq/Ochiq)</th>#}
+{#                                                    <th>Promouterga o'tkazish</th>#}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for t in mijoz %}
+                                                    <tr class="text-center">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{% if t.surname is not None %}<a href="{% url 'edit' %}?id={{ t.id }}">{{ t.surname }}</a>{% endif %}</td>
+                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}">{{ t.name }}</a></td>
+                                                        <td>{{ t.birthday|date:'d.m.Y' }}</td>
+                                                        <td>{% if t.district is not None %}{{ t.district.region.name }}  {{ t.district }}  {% else %}{% endif %}</td>
+                                                        <td>{{ t.phone }}</td>
+{#                                                        {% if t.degree == 1 %}#}
+{#                                                            <td>Past</td>#}
+{#                                                        {% elif t.degree == 2 %}#}
+{#                                                            <td>O`rta</td>#}
+{#                                                        {% else %}#}
+{#                                                            <td>Yuqori</td>#}
+{#                                                        {% endif %}#}
+{#                                                        <td>{% for i in t.categoryproduct.all %} {{ i }}, {% endfor %}</td>#}
+                                                        <td>{{ t.abcxyz }}</td>
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=1">{% if t.step1 == "" %}-{% else %}{{ t.step1 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=2">{% if t.step2 == "" %}-{% else %}{{ t.step2 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=3">{% if t.step3 == "" %}-{% else %}{{ t.step3 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=4">{% if t.step4 == "" %}-{% else %}{{ t.step4 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=5">{% if t.step5 == "" %}-{% else %}{{ t.step5 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'up' %}?id={{ t.id }}&s=4" class="waves-effect waves-light btn btn-primary btn-circle mx-5"><span class="mdi mdi-arrow-right"></span></a></td>#}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                              <!-- /.box -->
+                            </div>
+						</div>
+						<div id="navpills-4" class="tab-pane">
+							<div class="col-12" style="padding: 0">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table id="example111" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>№</th>
+                                                    <th>Familiya</th>
+                                                    <th>Ism</th>
+                                                    <th>Tug'ilgan sana</th>
+                                                    <th>Manzil</th>
+                                                    <th>Telefon</th>
+{#                                                    <th>Daraja</th>#}
+{#                                                    <th>Qanday maxsulot yoqishi</th>#}
+                                                    <th>ABC</th>
+{#                                                    <th>Vaziyat (ma`lumot to`plash)</th>#}
+{#                                                    <th>Muammo (ular boshdan kechirgan og`riq va muammolarni aniqlang)</th>#}
+{#                                                    <th>Imkoniyat (bu og`riqlarni nima uchun hal qilish kerakligini ta`kidlang)</th>#}
+{#                                                    <th>To'lov (ularni o`zlari shunday xulosa chiqarishga undang)</th>#}
+{#                                                    <th>Xulosa (Yopiq/Ochiq)</th>#}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for t in promouter %}
+                                                    <tr class="text-center">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{% if t.surname is not None %}<a href="{% url 'edit' %}?id={{ t.id }}">{{ t.surname }}</a>{% endif %}</td>
+                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}">{{ t.name }}</a></td>
+                                                        <td>{{ t.birthday|date:'d.m.Y' }}</td>
+                                                        <td>{% if t.district is not None %}{{ t.district.region.name }}  {{ t.district }}  {% else %}{% endif %}</td>
+                                                        <td>{% if t.phone is not None %}{{ t.phone }}{% else %}{% endif %}</td>
+{#                                                        {% if t.degree == 1 %}#}
+{#                                                            <td>Past</td>#}
+{#                                                        {% elif t.degree == 2 %}#}
+{#                                                            <td>O`rta</td>#}
+{#                                                        {% else %}#}
+{#                                                            <td>Yuqori</td>#}
+{#                                                        {% endif %}#}
+{#                                                        <td>{% for i in t.categoryproduct.all %} {{ i }}, {% endfor %}</td>#}
+                                                        <td>{{ t.abcxyz }}</td>
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=1">{% if t.step1 == "" %}-{% else %}{{ t.step1 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=2">{% if t.step2 == "" %}-{% else %}{{ t.step2 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=3">{% if t.step3 == "" %}-{% else %}{{ t.step3 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=4">{% if t.step4 == "" %}-{% else %}{{ t.step4 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'edit' %}?id={{ t.id }}&s=5">{% if t.step5 == "" %}-{% else %}{{ t.step5 }}{% endif %}</a></td>#}
+{#                                                        <td><a href="{% url 'up' %}?id={{ t.id }}&s=4" class="waves-effect waves-light btn btn-primary btn-circle mx-5"><span class="mdi mdi-arrow-right"></span></a></td>#}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                              <!-- /.box -->
+                            </div>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>  
+		  </div>
+		  <!-- /.row -->
+
+		</section>
+		<!-- /.content -->	  
+{% endblock content %}
+{% block js %}
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>	<!-- Sunny Admin App -->
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+
+	<!-- Vendor JS -->
+    <script src="{% static 'crm/assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/data-table.js'%}"></script>
+
+	<!-- Sunny Admin App -->
+{% endblock js %}

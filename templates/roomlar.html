@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Bosh Sahifa</title>
+{% endblock title %}
+{% block css %}
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+{% endblock css %}
+{% block content %}
+		<!-- Main content -->
+		<section class="content">
+
+		  <div class="row">
+
+			<div class="col-12 col-lg-6">
+			  <div class="box">
+
+					<div class="box-header with-border">
+						<div class="row">
+							<div class="col-4"><h4 class="box-title">Bo'sh xonalar</h4></div>
+							<div class="col-4"></div>
+								<div class="col-4">
+									<select class="form-control" name="filial" onchange="getxona()" id="filial">
+										<option value="">Filialni tanlang</option>
+										{% for f in filial %}
+											<option value="{{ f.id }}">{{ f.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+						</div>
+					</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="table-responsive">
+					  <table class="table mb-0">
+						  <thead>
+							<tr>
+							  <th scope="col">#</th>
+							  <th scope="col">Xona</th>
+							  <th scope="col">Type</th>
+							  <th scope="col">Sig'im</th>
+							</tr>
+						  </thead>
+						  <tbody id="room0">
+							{% for r in rooms0 %}
+                                <tr>
+                                  <th scope="row">{{ forloop.counter }}</th>
+                                  <td>{{ r.name }}</td>
+                                  <td>{{ r.type.name }}</td>
+                                  <td>{{ r.capacity }} kishi</td>
+                                </tr>
+                            {% endfor %}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>
+
+            <div class="col-12 col-lg-6">
+			  <div class="box">
+				<div class="box-header with-border">
+				  <h4 class="box-title">Band xonalar</h4>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="table-responsive">
+					  <table class="table mb-0">
+						  <thead>
+							<tr>
+							  <th scope="col">#</th>
+							  <th scope="col">Xona</th>
+							  <th scope="col">Type</th>
+							  <th scope="col">Sig'im</th>
+							</tr>
+						  </thead>
+						  <tbody id="room1">
+							{% for r in rooms1 %}
+                                <tr>
+                                  <th scope="row">{{ forloop.counter }}</th>
+                                  <td>{{ r.name }}</td>
+                                  <td>{{ r.type.name }}</td>
+                                  <td>{{ r.capacity }} kishi</td>
+                                </tr>
+                            {% endfor %}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>
+
+		  </div>
+		  <!-- /.row -->
+
+		</section>
+		<!-- /.content -->
+
+{% endblock content %}
+
+{% block js %}
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+    <script>
+        function getxona(){
+            id = document.getElementById('filial').value;
+            $.ajax({
+                type: 'GET',
+                url: '{% url "getxonalar" %}?id='+String(id),
+                success: function (dt){
+                    console.log(dt);
+                    console.log(dt['room0']);
+                    console.log(dt['room1']);
+                    var room0 = dt['room0'];
+                    var room1 = dt['room1'];
+                    $('#room0').empty();
+                    $('#room1').empty();
+                    var i = 1;
+                    var ii =1;
+                    for(r of room0){
+                        console.log(r.name);
+                        var tr = `<tr>
+                                      <th scope="row">` + String(i) + `</th>
+                                      <td>`+ String(r.name) +`</td>
+                                      <td>`+ String(r.type) +`</td>
+                                      <td>`+ String(r.capacity) +` kishi</td>
+
+                                    </tr>`;
+                        i++;
+                        $('#room0').append(tr);
+                    }
+                    for(r of room1){
+                        console.log(r.name);
+                        var tr = `<tr>
+                                      <th scope="row">` + String(ii) + `</th>
+                                      <td>`+ String(r.name) +`</td>
+                                      <td>`+ String(r.type) +`</td>
+                                      <td>`+ String(r.capacity) +` kishi</td>
+
+                                    </tr>`;
+                        ii++;
+                        $('#room1').append(tr);
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock js %}
+

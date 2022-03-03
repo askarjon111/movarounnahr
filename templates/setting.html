@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Sozlama</title>
+{% endblock title %}
+{% block css %}
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+    <!-- Style-->
+	<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+	<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+{% endblock css %}
+{% block content %}
+    <section class="content">
+
+      <div class="box box-default">
+            <div class="box-body">
+                <!-- Nav tabs -->
+                <div class="vtabs" style="width: 100%">
+                    <ul class="nav nav-tabs tabs-vertical" role="tablist">
+                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home4" role="tab"><span class="hidden-sm-up"><i class="ion-home"></i></span> <span class="hidden-xs-down">Integratsiya</span> </a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile4" role="tab"><span class="hidden-sm-up"><i class="ion-person"></i></span> <span class="hidden-xs-down">Hodimlar</span></a> </li>
+{#                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages4" role="tab"><span class="hidden-sm-up"><i class="ion-email"></i></span> <span class="hidden-xs-down">Post</span></a> </li>#}
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home4" role="tabpanel">
+                            <div class="p-15">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.tags == "error" %}
+                                            <div class="alert alert-error alert-dismissable">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ message }}
+                                            </div>
+                                        {% endif %}
+                                        {% if message.tags == "success" %}
+                                            <div class="alert alert-success alert-dismissable">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{ message }}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-xl-2 col-6" data-toggle="modal" data-target="#modal-centerbot">
+                                        <div class="box overflow-hidden pull-up hov-rs" style="margin: 0">
+                                            <div class="box-body text-center">
+                                                <div class="icon bg-primary-light rounded w-60 h-60 mx-auto">
+                                                    <i class="text-primary mr-0 font-size-24 mdi mdi-robot"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-mute mt-20 mb-0 font-size-16">Telegram</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-6" data-toggle="modal" data-target="#modal-centersms">
+                                        <div class="box overflow-hidden pull-up hov-rs" style="margin: 0">
+                                            <div class="box-body text-center">
+                                                <div class="icon bg-info-light rounded w-60 h-60 mx-auto">
+                                                    <i class="text-info mr-0 font-size-24 mdi mdi-message-reply-text"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-mute mt-20 mb-0 font-size-16">SMS</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="profile4" role="tabpanel">
+
+                                <div class="box" style="margin: 0;    -webkit-box-shadow: 0 0 0 rgb(8 21 66 / 5%);">
+                                    <div class="box-header with-border" style="padding: 0.5rem 0.5rem;">
+
+                                        <h4 class="box-title">Hodimlar</h4>
+                                        <button style="float: right" type="button" class="btn btn-rounded btn-primary" data-toggle="modal" data-target="#modal-center">Qo'shish</button>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table class="table table-hover mb-0">
+                                              <tbody>
+                                                <tr>
+                                                  <th scope="col">#</th>
+                                                  <th scope="col">First</th>
+                                                  <th scope="col">Last</th>
+                                                  <th scope="col">Lavozim</th>
+                    {#							  <th scope="col">Taxrirlash</th>#}
+                                                  <th scope="col">O'chirish</th>
+                                                  <th scope="col">Taxrirlash</th>
+                                                </tr>
+                                              </tbody>
+                                              <tbody>
+                                                {% for u in users %}
+                                                    <tr>
+                                                      <th scope="row">{{ forloop.counter }}</th>
+                                                      <td>{{ u.first_name }}</td>
+                                                      <td>{{ u.last_name }}</td>
+                                                      <td>{% if u.is_director == True %}Director{% else %}Hodim{% endif %}</td>
+                    {#                                    <td><i data-feather="edit" id="edit" data-toggle="modal" data-target="#modal-center"></i></td>#}
+                                                        <td onclick="deletehodim({{ u.id }})">{% if u.is_director == True %}{% else %}<i data-feather="trash-2" id="delete"></i>{% endif %}</td>
+                                                        <td onclick="edithodim({{ u.id }})" data-toggle="modal" data-target="#modal-center-edit">{% if u.is_director == True %}{% else %}<i data-feather="edit-2" id="edit"></i>{% endif %}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                              </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                  </div>
+
+                        </div>
+                        <div class="tab-pane" id="messages4" role="tabpanel">
+                            <div class="box-body">
+                              <form action="" method="post">
+                                  {% csrf_token %}
+            {#                        <textarea name="solution" rows="25" cols="80" name="editor" class="form-control" required></textarea>#}
+                                    <textarea name="editor1" rows="30" cols="20"></textarea>
+                                    <button type="submit" class="btn btn-rounded btn-success pull-right mt-2">Jo'natish</button>
+                              </form>
+				            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <!-- /.box-body -->
+      </div>
+
+    </section>
+
+<!-- Modal -->
+  <div class="modal center-modal fade" id="modal-centerbot" tabindex="-1">
+	  <div class="modal-dialog">
+          <form action="{% url 'add_bot' %}" method="post">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title">Telegram bot token</h5>
+			<button type="button" class="close" data-dismiss="modal">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+                {% csrf_token %}
+              <div class="modal-body">
+                <div class="form-group">
+                    {% if token %}
+                        <label>Hozirgi token: <span style="color: green">{{ token|truncatechars:50 }}</span></label>
+                    {% endif %}
+                    <input type="text" class="form-control" name="token" placeholder="Token">
+                </div>
+              </div>
+              <div class="modal-footer modal-footer-uniform">
+                <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">Yopish</button>
+                <input type="submit" class="btn btn-rounded btn-primary float-right" value="Saqlash">
+              </div>
+		</div>
+      </form>
+	  </div>
+	</div>
+<!-- /.modal -->
+<!-- Modal -->
+  <div class="modal center-modal fade" id="modal-centersms" tabindex="-1">
+	  <div class="modal-dialog">
+          <form action="{% url 'addsms' %}" method="post">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title">SMS konfiguratsiya</h5>
+			<button type="button" class="close" data-dismiss="modal">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+                {% csrf_token %}
+              <div class="modal-body">
+                <div class="form-group">
+                    {% if smstoken %}
+                        <label>Hozirgi token: <span style="color: green">{{ smstoken|truncatechars:50 }}</span></label>
+                    {% endif %}
+                    <input type="text" class="form-control" name="token" placeholder="Token">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6"><input type="text" class="form-control" name="nickname" placeholder="Nickname"></div>
+                        <div class="col-6"><input type="text" class="form-control" name="callback" placeholder="Callback url"></div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer modal-footer-uniform">
+                <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">Yopish</button>
+                <input type="submit" class="btn btn-rounded btn-primary float-right" value="Saqlash">
+              </div>
+		</div>
+      </form>
+	  </div>
+	</div>
+<!-- /.modal -->
+      <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+
+		  <div class="modal-header">
+			<h5 class="modal-title">Hodim Qo'shish</h5>
+			<button type="button" class="close" data-dismiss="modal">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+            <form action="{% url 'addhodim' %}" method="post">
+              <div class="modal-body">
+                  {% csrf_token %}
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Familiya</label>
+                        <input type="text" name="fam" class="form-control">
+                      </div>
+                      <div class="col-6">
+                        <label>Ism</label>
+                        <input type="text" name="ism" class="form-control">
+                      </div>
+                  </div>
+                  <div class="row mt-2">
+                      <div class="col-6">
+                        <label>Login</label>
+                        <input type="text" name="username" class="form-control">
+                      </div>
+                      <div class="col-6">
+                        <label>Parol</label>
+                        <input type="text" name="password" class="form-control">
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">Bekor qilish</button>
+                <input type="submit" class="btn btn-rounded btn-primary float-right" value="Qo'shish">
+              </div>
+            </form>
+		</div>
+	  </div>
+	</div>
+    <div class="modal center-modal fade" id="modal-center-edit" tabindex="-1">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title">Hodimni taxrirlash</h5>
+			<button type="button" class="close" data-dismiss="modal">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+            <form action="{% url 'edithodim' %}" method="post">
+              <div class="modal-body">
+                  {% csrf_token %}
+                  <div class="row">
+                      <div class="col-6">
+                        <label>Familiya</label>
+                        <input type="text" name="fam" class="form-control" id="fam">
+                      </div>
+                      <div class="col-6">
+                        <label>Ism</label>
+                        <input type="text" name="ism" class="form-control" id="ism">
+                      </div>
+                  </div>
+                  <div class="row mt-2">
+                      <div class="col-6">
+                        <label>Login</label>
+                        <input type="text" name="username" class="form-control" id="username">
+                      </div>
+                      <div class="col-6">
+                        <label>Parol</label>
+                        <input type="text" name="password" class="form-control" id="password">
+                        <input type="hidden" name="id" class="form-control" id="id">
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-rounded btn-secondary" data-dismiss="modal">Bekor qilish</button>
+                <input type="submit" class="btn btn-rounded btn-primary float-right" value="Taxrirlash">
+              </div>
+            </form>
+		</div>
+	  </div>
+	</div>
+{% endblock content %}
+{% block js %}
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>
+    <script src="{% static 'crm/assets/vendor_components/easypiechart/dist/jquery.easypiechart.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/apexcharts-bundle/irregular-data-series.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js'%}"></script>
+	<!-- Sunny Admin App -->
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/dashboard.js'%}"></script>
+    <script src="{% static 'crm/task/sweeatalert.js' %}"></script>
+    <!-- Vendor JS -->
+    <script src="{% static 'crm/assets/vendor_components/ckeditor/ckeditor.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/editor.js'%}"></script>
+
+    <script src="{% static 'crm/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js'%}"></script>
+    <script src="{% static 'crm/main/pages/toastr.js'%}"></script>
+    <script src="{% static 'crm/main/pages/notification.js'%}"></script>
+
+    <script>
+        function deletehodim(id){
+            swal({
+            title: "Chindan ham o'chirmoqchimisiz?",
+            icon: "warning",
+            buttons: ["Yo'q", "Ha"],
+        }).then((willDelete) => {
+            if (willDelete) {
+                location.href=`{% url 'deletehodim' %}?id=${id}`
+            }
+        });
+        }
+        function edithodim(id){
+            $.ajax({
+                type: 'get',
+                url: `/gethodim/?id=`+String(id),
+                success: function (r) {
+                    u = r['user'];
+                    document.getElementById('fam').value = u['fam']
+                    document.getElementById('ism').value = u['ism']
+                    document.getElementById('id').value = u['id']
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+    </script>
+{% endblock js %}

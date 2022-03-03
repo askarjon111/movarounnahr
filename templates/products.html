@@ -1,0 +1,133 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% load humanize  %}
+{% block title %}
+    <title>CRM | Client Base</title>
+{% endblock title %}
+{% block css %}
+	<!-- Vendors Style-->
+	<link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+	  
+	<!-- Style-->  
+	<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+	<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+
+	<!-- Style-->
+{% endblock css %}
+{% block content %}
+		<!-- Main content -->
+		<section class="content">
+
+		  <div class="row">
+
+			<div class="col-12 ">
+			  <div class="box">
+				<div class="box-body" style="padding: 0">
+                    <div class="tab-content"  id="message_container">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.tags == "error" %}
+                                        <div class="alert alert-danger">
+                                            {{ message }}</div>
+                                    {% endif %}
+                                    {% if message.tags == "success" %}
+                                        <div class="alert alert-success">
+                                            {{ message }}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        <!-- Tab panes -->
+                    </div>
+					<div class="tab-content">
+                        <div class="row text-center">
+                            <div class="col-12" style="padding: 0">
+                                <div class="">
+                                    <div class="row">
+                                    <div class="col-9">
+                                        <h1>{{ user.filial.name }}</h1>
+                                    </div>
+                                    <div class="col-2 py-5">
+                                            <a href="{% url 'addmaxsulot' %}" class="btn btn-rounded btn-success float-right" style="margin-bottom: 10px;">Maxsulot qo'shish</a>
+                                    </div>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                          <table id="example5" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>№</th>
+                                                    <th>Maxsulot nomi</th>
+                                                    <th>Narxi</th>
+                                                    <th>Izoh</th>
+                                                    <th>Bor - Yoq</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in maxsulot %}
+                                                {% if i.filial == user.filial %}
+                                                <tr class="text-center">
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ i.name }}</td>
+                                                    <td>{{ i.price|intcomma }}</td>
+                                                    <td>{{ i.izoh }}</td>
+                                                    {% if i.bor_yoqligi == '1' %}
+                                                    <td><button type="button" onclick="changemaxsulot({{ i.id }})" class="btn btn-circle btn-success mb-5"><i class="mdi mdi-check"></i></button></td>
+                                                    {% else %}
+                                                    <td><button type="button" onclick="changemaxsulot({{ i.id }})" class="btn btn-circle btn-danger mb-5"><i class="mdi mdi-close"></i></button></td>
+                                                    {% endif %}
+                                                </tr>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                              <!-- /.box -->
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>  
+		  </div>
+		  <!-- /.row -->
+
+		</section>
+		<!-- /.content -->	  
+{% endblock content %}
+{% block js %}
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>	<!-- Sunny Admin App -->
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+
+	<!-- Vendor JS -->
+    <script src="{% static 'crm/assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/data-table.js'%}"></script>
+
+	<!-- Sunny Admin App -->
+    <script>
+        function changemaxsulot(id){
+            console.log(id);
+            $.ajax({
+                type: 'GET',
+                url: '{% url "changemaxsulot" %}?id='+String(id),
+                success: function (){
+                    location.reload();
+                }
+            });
+        }
+    </script>
+<script>
+        var message_ele = document.getElementById("message_container");
+
+        setTimeout(function(){
+           message_ele.style.display = "none";
+        }, 1000);
+        // Timeout is 1 sec, you can change it
+    </script>
+{% endblock js %}
