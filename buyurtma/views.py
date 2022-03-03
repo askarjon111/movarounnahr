@@ -414,6 +414,7 @@ class SmsCall(LoginRequiredMixin, TemplateView):
 
         return context
 
+
 def checkPhone(phone):
     try:
         int(phone)
