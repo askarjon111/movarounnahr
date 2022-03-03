@@ -1,0 +1,205 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Buyurtmalar</title>
+{% endblock title %}
+{% block css %}
+	<!-- Vendors Style-->
+	<link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+	  
+	<!-- Style-->  
+	<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+	<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+
+{% endblock css %}
+{% block content %}
+
+		<!-- Main content -->
+		<section class="content">
+		  <div class="row">
+			  
+			<div class="col-12">
+				<div class="box">
+					<div class="box-header">
+                        <div class="row">
+                            <div class="col-4"><h4 class="box-title">Buyurtmalar</h4></div>
+                            <div class="col-4"></div>
+                            <div class="col-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                  <input type="text" class="form-control pull-right" id="reservation">
+                                </div>
+                            </div>
+                        </div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table id="complex_header" class="table table-striped table-bordered display" style="width:100%">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Mijoz</th>
+										<th>Mijoz telefon</th>
+										<th>Mijoz soni</th>
+										<th>Taom</th>
+										<th>Xona</th>
+										<th>Filial</th>
+										<th>Buyurtma tipi</th>
+										<th>Sana</th>
+									</tr>
+								</thead>
+								<tbody id="trr">
+                                    {% for b in books %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ b.client.name }}</td>
+                                            <td>{{ b.client.phone }}</td>
+                                            <td>{{ b.people }}</td>
+                                            <td>{{ b.meals }}</td>
+                                            <td>{{ b.room.name }}</td>
+                                            <td>{{ b.filial.name }}</td>
+                                            <td>
+                                                {% if b.ordertype == 0 %}
+                                                    <span class="badge badge-pill badge-danger">Xona</span>
+                                                {% elif b.ordertype == 1 %}
+                                                    <span class="badge badge-pill badge-warning">Dastavka</span>
+                                                {% else %}
+                                                    <span class="badge badge-pill badge-success">Saboy</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ b.date }}</td>
+                                        </tr>
+                                    {% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		  </div>
+		  <!-- /.row -->
+		</section>
+		<!-- /.content -->
+{% endblock content %}
+{% block js %}
+
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>
+    <script src="{% static 'crm/assets/vendor_components/datatable/datatables.min.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/data-table.js'%}"></script>
+
+	<!-- Sunny Admin App -->
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+
+	<script src="{% static 'crm/assets/vendor_components/select2/dist/js/select2.full.js'%}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.js'%}"></script>
+    <script src="{% static 'crm/assets/vendor_components/moment/min/moment.min.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/advanced-form-element.js'%}"></script>
+    <script>
+    $('#reservation').on("change", function () {
+            var date1 = $('#reservation').val().slice(0, 10);
+            var date2 = $('#reservation').val().slice(13, 24);
+            $.ajax({
+                type: 'get',
+                url: `{% url 'bookrange' %}?sana1=${date1}&sana2=${date2}`,
+                success: function (dt) {
+                    console.log(dt);
+                    books = dt['books'];
+                    $("#trr").empty();
+                    let i = 1;
+                    for(b of books){
+                        if(b.room) {
+                            if (b.ordertype == 0) {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td>` + String(b.room) + `</td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-danger">Xona</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            } else if (b.ordertype == 1) {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td>` + String(b.room) + `</td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-warning">Dastavka</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            } else {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td>` + String(b.room) + `</td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-success">Saboy</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            }
+                        }else{
+                            if (b.ordertype == 0) {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td></td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-danger">Xona</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            } else if (b.ordertype == 1) {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td></td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-warning">Dastavka</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            } else {
+                                var tr = `<tr>
+                                    <td>` + i + `</td>
+                                    <td>` + String(b.client) + `</td>
+                                    <td>` + String(b.phone) + `</td>
+                                    <td>` + String(b.people) + `</td>
+                                    <td>` + String(b.meal) + `</td>
+                                    <td></td>
+                                    <td>` + String(b.filial) + `</td>
+                                    <td><span class="badge badge-pill badge-success">Saboy</span></td>
+                                    <td>` + String(b.date) + `</td>
+                                </tr>`
+                            }
+                        }
+
+                        i++;
+                        $("#trr").append(tr);
+                    }
+                },
+                error: function (e) {
+                    //console.log(e);
+                }
+            });
+        });
+    </script>
+{% endblock js %}

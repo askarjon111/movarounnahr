@@ -1,0 +1,1027 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+<title>CRM | Bosh Sahifa</title>
+{% endblock title %}
+{% block css %}
+<!-- Vendors Style-->
+<link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+
+<!-- Style-->
+<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+<link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css'%}">
+	  
+<!-- Style-->  
+<link rel="stylesheet" href="{% static 'crm/main/css/style.css'%}">
+<link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css'%}">
+{% endblock css %}
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12 " id="message_container">
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <button class="tst3 btn btn-success btn-block mb-15">{{ message }}</button>
+            {% elif message.tags == 'error' %}
+            <button class="tst3 btn btn-danger btn-block mb-15">{{ message }}</button>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-12">
+            <div class="box">
+                <div class="box-body">
+                    <ul class="nav nav-pills rounded nav-justified">
+                        <li class="nav-item"><a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                                aria-expanded="false">Olib ketish</a></li>
+                        <li class="nav-item"><a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                                aria-expanded="false">Yetkazib berish</a></li>
+                        <li class="nav-item"><a href="#navpills-3" class="nav-link" data-toggle="tab"
+                                                aria-expanded="true">Xona band qilish</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="navpills-1" class="tab-pane active">
+                    <!-- Categroy 1 -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Olib ketish</h4>
+                                </div>
+                                <div class="box-body">
+                                    <form action="{% url 'olib-ketish' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>Mijoz qidirish telefon raqam orqali</label>
+                                            <select class="form-control select2" onchange="getuser1()" id="userid1"
+                                                    name="mijoz" style="width: 100%;">
+                                                <option selected="selected">Telefon nomerni kiriting</option>
+                                                {% for m in mijoz %}
+                                                <option value="{{ m.id }}">{{ m.phone }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ism</label>
+                                            <input type="text" class="form-control" placeholder="Ismni kiriting"
+                                                   name="ism" id="olism" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Familiya</label>
+                                            <input type="text" class="form-control" placeholder="Familiyani kiriting"
+                                                   name="fam" id="olfam">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telefon</label>
+                                            <label style="float: right; color: green">Na'muna: +998901234567 </label>
+                                            <input type="tel" class="form-control"  value="+998"
+                                                   name="tel" id="olphone" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tug'ilgan kun</label>
+                                            <input class="form-control" type="date" name="birthday" id="olbirthday">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bizni qayerdan eshitdi</label>
+                                            <input type="text" class="form-control" placeholder="Bizni qayerdan eshitdi"
+                                                   name="where" id="olwhere">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Filial</label>
+                                            <select class="form-control" name="filial" id="filial_1">
+                                                <option value="">Filialni tanlang</option>
+                                                {% for f in filial %}
+                                                <option value="{{ f.id }}">{{ f.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="container1">
+                                                <button type="button"
+                                                        class="add_form_field btn-secondary btn btn-rounded btn-success">
+                                                    Maxsulot qoshish &nbsp;
+                                                </button>
+                                            </div>
+                                            <br>
+                                            <div class="row py-5 pull-right">
+                                                <p>Umumiy: <input
+                                                        style="outline: none; border: none; background-color: #272E48; color: white"
+                                                        disabled value="0" class="total" name="total1"></p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Olib ketish vaqti</label>
+                                            <input class="form-control" type="datetime-local" name="sana"
+                                                   value="Date()">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Izoh</label>
+                                            <textarea rows="2" required class="form-control"
+                                                      placeholder="Izoh" name="comment" value="comment()"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-rounded btn-success pull-right">
+                                                Buyurtma berish
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Olib ketilshi kutilmoqda</h4>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table id="example6" class="display table table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Mijoz</th>
+                                                <th scope="col">Telefon</th>
+                                                <th scope="col">Filial</th>
+                                                <th scope="col">Buyurtma</th>
+                                                <th scope="col">Buyurtma vaqti</th>
+                                                <th scope="col">Izoh</th>
+            {#                                  <th scope="col">Olib ketildi</th>                               #}
+                                            </tr>
+                                            </tbody>
+                                            <tbody>
+                                            {% for y in olibketish %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.client.name }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.client.phone }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.filial }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.meals }}
+                                                </td>
+
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.ordertime }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.comment }}
+                                                </td>
+                                                {#<td> <button type="button" onclick="change({{ y.id }})" class="btn btn-circle btn-success mb-5"><i class="mdi mdi-check"></i></button> </td>                                   #}
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+
+                </div>
+                <div id="navpills-2" class="tab-pane">
+                    <!-- Categroy 2 -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Yetkazib berish</h4>
+                                </div>
+                                <div class="box-body">
+                                    <form action="{% url 'yetkazib-berish' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>Mijoz qidirish telefon raqam orqali</label>
+                                            <select class="form-control select2" onchange="getuser2()" name="mijoz"
+                                                    id="userid2" style="width: 100%;">
+                                                <option selected="selected">Telefon nomerni kiriting</option>
+                                                {% for m in mijoz %}
+                                                <option value="{{ m.id }}">{{ m.phone }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ism</label>
+                                            <input type="text" class="form-control" placeholder="Ismni kiriting"
+                                                   name="ism" id="yetism">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Familiya</label>
+                                            <input type="text" class="form-control" placeholder="Familiyani kiriting"
+                                                   name="fam" id="yetfam">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telefon</label>
+                                            <label style="float: right; color: green"> Na'muna: +998901234567</label>
+                                            <input type="tel" class="form-control"  value="+998"
+                                                   name="tel" id="yetphone">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tug'ilgan kun</label>
+                                            <input class="form-control" type="date" name="birthday" id="yetbirthday">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bizni qayerdan eshitdi</label>
+                                            <input type="text" class="form-control" placeholder="Bizni qayerdan eshitdi"
+                                                   name="where" id="yetwhere">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Filial</label>
+                                            <select class="form-control" name="filial" id="filial_2">
+                                                <option value="">Filialni tanlang</option>
+                                                {% for f in filial %}
+                                                <option value="{{ f.id }}">{{ f.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="container2">
+                                            <button type="button"
+                                                    class="yet_add_form_field btn-secondary btn btn-rounded btn-success">
+                                                Maxsulot qoshish &nbsp;
+                                            </button>
+                                        </div>
+                                        <br>
+                                        <div class="row py-5 pull-right">
+                                            <p>Umumiy: <input
+                                                    style="outline: none; border: none; background-color: #272E48; color: white" value="0" class="total" name="total1"
+                                                    disabled></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Manzil</label>
+                                            <textarea rows="2" required class="form-control"
+                                                      placeholder="Manzilni kiriting" name="address"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Yetkazib berish vaqti</label>
+                                            <input class="form-control" type="datetime-local" name="sana"
+                                                   value="Date()">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Izoh</label>
+                                            <textarea rows="2" required class="form-control"
+                                                      placeholder="Izoh" name="comment" value="comment()"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-rounded btn-success pull-right">
+                                                Buyurtma berish
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Yetkazib berilishi kutilmoqda</h4>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Mijoz</th>
+                                                <th scope="col">Telefon</th>
+                                                <th scope="col">Filial</th>
+                                                <th scope="col">Buyurtma</th>
+                                                <th scope="col">Manzil</th>
+                                                <th scope="col">Izoh</th>
+                                                <th scope="col">Buyurtma vaqti</th>
+                                            </tr>
+                                            </tbody>
+                                            <tbody>
+                                            {% for y in yetkazibberish %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.client.name }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.client.phone }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.filial }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.meals }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.address }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.comment }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill"
+                                                    onclick="getData({{ y.id }})">{{ y.ordertime }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="navpills-3" class="tab-pane">
+                    <!-- Categroy 3 -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Xona band qilish</h4>
+                                </div>
+                                <div class="box-body">
+                                    <form action="{% url 'band-qilish' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>Mijoz qidirish telefon raqam orqali</label>
+                                            <select class="form-control select2" onchange="getuser3()" id="userid3"
+                                                    name="mijoz" style="width: 100%;">
+                                                <option selected="selected">Telefon nomerni kiriting</option>
+                                                {% for m in mijoz %}
+                                                <option value="{{ m.id }}">{{ m.phone }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ism</label>
+                                            <input type="text" class="form-control" placeholder="Ismni kiriting"
+                                                   name="ism" id="banism">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Familiya</label>
+                                            <input type="text" class="form-control" placeholder="Familiyani kiriting"
+                                                   name="fam" id="banfam">
+                                        </div>
+                                     
+                                        <div class="form-group">
+                                            <label>Band qilish: vaqti ... dan  </label>
+                                            <input class="form-control" id="takeThis2" onchange="getxona()" type="datetime-local" name="sanafrom"
+                                                   >
+                                        </div>
+                                      
+                                      
+                                        <div class="form-group">
+                                            <label>Band qilish vaqti ... gacha</label>
+                                            <input class="form-control" id="takeThis"  onchange="getxona()" type="datetime-local" name="sanato"
+                                                   >
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            <label>Filial</label>
+                                            <select class="form-control" name="filial" onchange="getxona()" id="filial">
+                                                <option value="">Filialni tanlang</option>
+                                                {% for f in filial %}
+                                                <option value="{{ f.id }}">{{ f.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+
+
+                                       
+                                      
+                                        <div class="form-group">
+                                            <label>Bosh Xonalar</label>
+                                            <select class="form-control" name="xona" id="xonalar">
+                                                <option value="">Xonani tanlang</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telefon</label>
+                                            <label style="float: right; color: green">Na'muna: +998901234567</label>
+                                            <input type="tel" class="form-control"  value="+998"
+                                                   name="tel" id="banphone">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tug'ilgan kun</label>
+                                            <input class="form-control" type="date" name="birthday" id="banbirthday">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bizni qayerdan eshitdi</label>
+                                            <input type="text" class="form-control" placeholder="Bizni qayerdan eshitdi"
+                                                   name="where" id="banwhere">
+                                        </div>
+                                       
+                                        
+                                        <div class="form-group">
+                                            <label>Nechi kishilik</label>
+                                            <input type="number" required class="form-control"
+                                                   placeholder="Nechi kishilik" name="quan">
+                                        </div>
+                                        <div class="container3">
+                                            <button type="button"
+                                                    class="band_add_form_field btn-secondary btn btn-rounded btn-success">
+                                                Maxsulot qoshish &nbsp;
+                                            </button>
+                                        </div>
+                                        <br>
+                                        <div class="row py-5 pull-right">
+                                            <p>Umumiy: <input
+                                                    style="outline: none; border: none; background-color: #272E48; color: white" name="total1" class="total" value="0"
+                                                    disabled></p>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                          <label>Izoh</label>
+                                            <textarea rows="2" required class="form-control"
+                                                      placeholder="Izoh" name="comment" value="comment"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-rounded btn-success pull-right">
+                                                Buyurtma berish
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">Band xonalar</h4>
+                                    <div id="complex_header_filter" class="dataTables_filter">
+                                    </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Mijoz</th>
+                                                <th scope="col">Telefon</th>
+                                                <th scope="col">Filial</th>
+                                                <th scope="col">Mijoz soni</th>
+                                                <th scope="col">Nechidan </th>
+                                                <th scope="col">Nechigacha </th>
+                                                <th scope="col">Zakaz qilingan maxsulotlar</th>
+                                                <th scope="col">Xona</th>
+                                                <th scope="col">Izoh</th>
+                                                {#<th scope="col">Bo'shatish</th>#}
+                                            </tr>
+                                            </tbody>
+                                            <tbody>
+                                            {% for b in bandqilish %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.client.name }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.client.phone }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.filial.name }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.people }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{b.date_from }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.date_to }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                    onclick="getData1({{ b.id }})">{{ b.meals }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                        onclick="getData1({{ b.id }})">{{ b.room.name }}
+                                                </td>
+                                                <td data-toggle="modal" data-target="#modal-fill1"
+                                                        onclick="getData1({{ b.id }})">{{ b.comment }}
+                                                </td>
+                                                {#<td><button type="button" onclick="change({{ b.id }})" class="btn btn-circle btn-success mb-5"><i class="mdi mdi-check"></i></button></td>#}
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--                Olib ketish-->
+        <!--                Yetkazib berish-->
+        <!--                Xona band qilish-->
+
+    </div>
+
+</section>
+<!-- /.content -->
+
+<!-- Modal -->
+<div class="modal modal-fill fade" style="background-color: #1a233a;" data-backdrop="false" id="modal-fill"
+     tabindex="-1">
+    <div class="modal-dialog">
+        <form action="{% url 'editbuyurtma' %}" method="post">
+            {% csrf_token %}
+            <div class="modal-content" style="background-color: #1a233a">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buyurtmani o'zgartirish</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="min-width: 500px;">
+                    {#<div class="form-group">#}
+                        {# <label>Mijoz qidirish telefon raqam orqali</label><span style="float:right">Eski mijoz : <ss id="eskidata"></ss></span>#}
+                        {# <select class="form-control select2" onchange="getuser4()" id="userid4" name="mijoz" style="width: 100%;"> #}
+                            {#<option selected="selected">Telefon nomerni kiriting</option> #}
+                            {# {% for m in mijoz %} #}
+                            {#<option value="{{ m.id }}">{{ m.phone }}</option> #}
+                            {# {% endfor %} #}
+                            {# </select> #}
+                        {#</div>#}
+                    <div class="form-group">
+                        <label>Ism</label>
+                        <input type="text" class="form-control" placeholder="Ismni kiriting" name="ism" id="modalism">
+                    </div>
+                    <div class="form-group">
+                        <label>Familiya</label>
+                        <input type="text" class="form-control" placeholder="Familiyani kiriting" name="fam"
+                               id="modalfam">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="number" class="form-control" placeholder="Telefonni kiriting" name="tel"
+                               id="modalphone">
+                    </div>
+                    <div class="form-group">
+                        <label>Buyurtma</label>
+                        <textarea rows="4" required class="form-control" placeholder="Buyurtmalarni yozing"
+                                  name="buyurtma" id="modalmeals"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Band qilish vaqti</label>
+                        <input class="form-control" type="datetime-local" name="sana" id="modalordertime"
+                               value="Date()">
+                        <input type="hidden" id="modalbookid" name="modalbookid">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rounded btn-primary" data-dismiss="modal">Yopish</button>
+                    {#<button type="button" class="btn btn-rounded btn-danger">O'chirish</button>#}
+                    <input type="submit" class="btn btn-rounded btn-success float-right" value="Saqlash">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /.modal -->
+<!-- Modal -->
+<div class="modal modal-fill fade" style="background-color: #1a233a;" data-backdrop="false" id="modal-fill1"
+     tabindex="-1">
+    <div class="modal-dialog">
+        <form action="{% url 'editbuyurtma1' %}" method="post">
+            {% csrf_token %}
+            <div class="modal-content" style="background-color: #1a233a">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buyurtmani o'zgartirish</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="min-width: 500px;">
+                    {#<div class="form-group">#}
+                        {# <label>Mijoz qidirish telefon raqam orqali</label><span style="float:right">Eski mijoz : <ss id="eskidata"></ss></span>#}
+                        {# <select class="form-control select2" onchange="getuser4()" id="userid4" name="mijoz" style="width: 100%;">#}
+                            {# <option selected="selected">Telefon nomerni kiriting</option> #}
+                            {# {% for m in mijoz %}#}
+                            {# <option value="{{ m.id }}">{{ m.phone }}</option> #}
+                            {# {% endfor %}#}
+                            {# </select>#}
+                        {# </div> #}
+                    <div class="form-group">
+                        <label>Ism</label>
+                        <input type="text" class="form-control" placeholder="Ismni kiriting" name="ism" id="modalism1">
+                    </div>
+                    <div class="form-group">
+                        <label>Familiya</label>
+                        <input type="text" class="form-control" placeholder="Familiyani kiriting" name="fam"
+                               id="modalfam1">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="number" class="form-control" placeholder="Telefonni kiriting" name="phone"
+                               id="modalphone1">
+                    </div>
+                    <div class="form-group">
+                        <label>Nechi kishi</label>
+                        <input type="number" class="form-control" placeholder="Nechi kishi" name="people"
+                               id="modalpeople1">
+                    </div>
+                    <div class="form-group">
+                        <label>Filial</label>
+                        <select class="form-control" name="filial" onchange="getxona1()" id="filial1" required>
+                            <option value="">Filialni tanlang</option>
+                            {% for f in filial %}
+                            <option value="{{ f.id }}">{{ f.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bosh Xonalar</label>
+                        <select class="form-control" name="xona" id="xonalar1">
+                            <option value="">Xonani tanlang</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Band qilish vaqti: ...dan</label>
+                        <input class="form-control" type="datetime-local" name="sanafrom" id="modaldate_from1"
+                               value="Date()">
+                        <label>Band qilish vaqti: ...gacha</label>
+                        <input class="form-control" type="datetime-local" name="sanato" id="modaldate_to1"
+                               value="Date()">
+                        <input type="hidden" id="modalbookid1" name="modalbookid1" >
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rounded btn-primary" data-dismiss="modal">Yopish</button>
+    {#              <button type="button" class="btn btn-rounded btn-danger">O'chirish</button>                               #}
+                    <input type="submit" class="btn btn-rounded btn-success float-right" value="Saqlash">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /.modal -->
+{% endblock content %}
+{% block js %}
+<!-- Vendor JS -->
+<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+<script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/select2/dist/js/select2.full.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/moment/min/moment.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js'%}"></script>
+<script src="{% static 'crm/assets/vendor_plugins/iCheck/icheck.min.js'%}"></script>
+<script src="{% static 'crm/main/js/pages/advanced-form-element.js'%}"></script>
+<!-- Sunny Admin App -->
+<script src="{% static 'crm/main/js/template.js'%}"></script>
+
+<script>
+    function getxona() {
+        id = document.getElementById('filial').value;
+        sanafrom = document.getElementById('takeThis2').value
+        sanato = document.getElementById('takeThis').value
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getxona" %}?id=' + Number(id)+"&sanafrom="+sanafrom+"&sanato="+sanato,
+            success: function (dt) {
+                console.log(dt);
+                let rooms = dt['rooms'];
+                $('#xonalar').empty(); 
+                console.log(rooms);
+                if (rooms?.length == 0) {
+                    let op = `<option value="">Bo'sh xona yo'q</option>`; 
+                    $('#xonalar').append(op);  
+                } else {
+                    for (r of rooms) {
+                        let op = `<option value="` + String(r.id) + `">` + String(r.name) + " " + String(r.type) + ' ' + String(r.capacity) + ` kishilik</option>`;
+                        $('#xonalar').append(op);
+                    }
+                }
+            }
+        });
+    }
+
+    function getxona1() {
+        id = document.getElementById('filial1').value;
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getxona" %}?id=' + String(id),
+            success: function (dt) {
+                let rooms = dt['rooms'];
+                $('#xonalar1').empty();
+                if (rooms.length == 0) {
+                    let op = `<option value="">Bo'sh xona yo'q</option>`;
+                    $('#xonalar1').append(op);
+                } else {
+                    for (r of rooms) {
+                        let op = `<option value="` + String(r.id) + `">` + String(r.name) + " " + String(r.capacity) + ` kishilik</option>`;
+                        $('#xonalar1').append(op);
+                    }
+                }
+            }
+        });
+    }
+
+    function getuser1() {
+        id = document.getElementById('userid1').value;
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getuser" %}?id=' + String(id),
+            success: function (dt) {
+                document.getElementById('olism').value = dt.name;
+                document.getElementById('olfam').value = dt.surname;
+                document.getElementById('olphone').value = dt.phone;
+                document.getElementById('olbirthday').value = dt.birthday;
+                document.getElementById('olwhere').value = dt.where;
+            }
+        });
+    }
+
+    function getuser2() {
+        id = document.getElementById('userid2').value;
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getuser" %}?id=' + String(id),
+            success: function (dt) {
+                document.getElementById('yetism').value = dt.name;
+                document.getElementById('yetfam').value = dt.surname;
+                document.getElementById('yetphone').value = dt.phone;
+                document.getElementById('yetbirthday').value = dt.birthday;
+                document.getElementById('yetwhere').value = dt.where;
+            }
+        });
+    }
+
+    function getuser3() {
+        id = document.getElementById('userid3').value;
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getuser" %}?id=' + String(id),
+            success: function (dt) {
+                document.getElementById('banism').value = dt.name;
+                document.getElementById('banfam').value = dt.surname;
+                document.getElementById('banphone').value = dt.phone;
+                document.getElementById('banbirthday').value = dt.birthday;
+                document.getElementById('banwhere').value = dt.where;
+            }
+        });
+    }
+
+    function getData(id) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getbuyurtma" %}?id=' + String(id),
+            success: function (dt) {
+                // console.log(dt)
+                document.getElementById('modalbookid').value = dt.id;
+                document.getElementById('modalism').value = dt.name;
+                document.getElementById('modalfam').value = dt.surname;
+                document.getElementById('modalphone').value = dt.phone;
+                document.getElementById('modalmeals').value = dt.meals;
+                document.getElementById('modalordertime').value = dt.ordertime;
+                document.getElementById('modalphone').value = dt.phone;
+            }
+        });
+    }
+
+    function getData1(id) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url "getbuyurtma1" %}?id=' + String(id),
+            success: function (dt) {
+                // console.log(dt.filial);
+                // console.log(dt.room);
+                document.getElementById('modalbookid1').value = dt.id;
+                document.getElementById('modalism1').value = dt.name;
+                document.getElementById('modalfam1').value = dt.surname;
+                document.getElementById('modalphone1').value = dt.phone;
+                document.getElementById('modalpeople1').value = dt.people;
+                document.getElementById('modalordertime1').value = dt.ordertime;
+            }
+        });
+    }
+     let currentInp = document.querySelector("#takeThis")
+     currentInp.addEventListener("keydown",function(){
+        getxona()
+        console.log("working")
+     })
+     
+</script>
+<!--    add form for olib ketish-->
+
+<script>
+    
+    let counter = 0
+    $(document).ready(function () {
+        let add_button = $(".add_form_field");
+
+        $(add_button).click(function () {
+            counter += 1
+            let filial_1 = document.getElementById('filial_1')
+            let stringSelect = ""
+
+            for(let i=0;i<mahsulotlar.length;i++){
+                if(mahsulotlar[i]['bor_yoqligi'] === "1" && mahsulotlar[i]['filial'] ===parseInt(filial_1.value)){
+                    stringSelect+= `
+                    <option value="${mahsulotlar[i]['id']}">${mahsulotlar[i]['name']}</option>
+                    `
+                }
+            }
+            // $("#filial_1").attr("disabled", true);
+            $(".container1").append(`<div class="section col-12">
+                        <table class="row cal py-5">
+                            <tr>
+                                <td class="col-3">
+                                    <select class="form-control select_gr_1" name="buyurtma` + counter + `" id="order` + counter + `">
+                                        <option value="" disabled selected>...</option>
+                                        ${stringSelect}
+                                    </select>
+                                </td>
+                                <td class="col-3 select_narx">
+                                    <input id="narxi` + counter + `" name="price" class="form-control price1" type="text" disabled>
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control calculate" id="soni` + counter + `" name="buyurtma_soni` + counter + `" type="number">
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control umumiy" type="tel" name="umumiy" id="umumiy` + counter + `" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+`)
+                        // $("#filial_1").attr('disabled', 'disabled')
+
+        });
+    })
+</script>
+<!--    add form for band qilish-->
+<script>
+
+
+    let band_counter = 0;
+
+    let mahsulotlar = {{ maxsulotjs|safe }};
+
+
+
+    $(document).ready(function () {
+        let add_button2 = $(".band_add_form_field");
+
+        $(add_button2).click(function () {
+            band_counter += 1
+            let filial_3 = document.getElementById('filial')
+            let stringSelect = ""
+
+            for(let i=0;i<mahsulotlar.length;i++){
+                if(mahsulotlar[i]['bor_yoqligi'] === "1" && mahsulotlar[i]['filial'] === parseInt(filial_3.value)){
+                    stringSelect+= `
+                    <option value="${mahsulotlar[i]['id']}">${mahsulotlar[i]['name']}</option>
+                    `
+                }
+            }
+            // $("#filial").attr("disabled", true);
+            $(".container3").append(`<div class="section col-12">
+                        <table class="row cal py-5">
+                            <tr>
+                                <td class="col-3">
+                                    <select class="form-control select_gr_1" name="band_buyurtma` + band_counter + `" id="order` + band_counter + `">
+                                        <option value="" disabled selected>...</option>
+                                        ${stringSelect}
+                                    </select>
+                                </td>
+                                <td class="col-3 select_narx">
+                                    <input id="narxi` + band_counter + `" name="price" class="form-control price1" type="text" disabled>
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control calculate" id="soni` + band_counter + `" name="band_buyurtma_soni` + band_counter + `" type="number">
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control umumiy" type="tel" name="umumiy" id="umumiy` + band_counter + `" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>`)
+            // $("#filial").attr('disabled', 'disabled')
+        });
+    })
+
+    $(document).on("change", '.select_gr_1', function () {
+        let id_1 = this.value
+        price = 0
+        for(let i=0;i<mahsulotlar.length;i++){
+            if(mahsulotlar[i]['id'] === parseInt(id_1)) {
+                price = mahsulotlar[i]['price']
+            }
+        }
+        $(this).parent().parent().find("input[name=price]").val(price)
+    });
+
+
+    $(document).on("keyup", '.calculate', function(){
+        var $row = $(this).closest("tr");
+        var total = 0;
+
+        $('.cal tr').each(function() {
+             var quan = $(this).find('.calculate').val();
+             var price = $(this).find('.price1').val();
+             var ex_tot =  quan * price;
+             console.log(quan, price, ex_tot, '?')
+             $(this).find('.umumiy').val(ex_tot);
+             total += parseFloat(ex_tot);
+        });
+         $('.total').val(total);
+    });
+
+    </script>
+
+<script>
+     
+    let yet_counter = 0
+    $(document).ready(function () {
+        let add_button2 = $(".yet_add_form_field");
+
+        $(add_button2).click(function () {
+            yet_counter += 1
+            let filial_2 = document.getElementById('filial_2')
+            console.log(filial_2)
+            console.log(filial_2.value)
+            console.log(filial_2.value === "")
+            let stringSelect = ""
+
+            for(let i=0;i<mahsulotlar.length;i++){
+                if(mahsulotlar[i]['bor_yoqligi'] === "1" && mahsulotlar[i]['filial'] === parseInt(filial_2.value)){
+                    stringSelect+= `
+                    <option value="${mahsulotlar[i]['id']}">${mahsulotlar[i]['name']}</option>
+                    `
+                }
+            }
+            // $("#filial_2").attr("disabled", true);
+            $(".container2").append(`<div class="section col-12">
+                        <table class="row cal py-5">
+                            <tr>
+                                <td class="col-3">
+                                    <select class="form-control select_gr_1" name="yet_buyurtma` + yet_counter + `" id="order` + yet_counter + `">
+                                        <option value="" disabled selected>...</option>
+                                        ${stringSelect}
+                                    </select>
+                                </td>
+                                <td class="col-3 select_narx">
+                                    <input id="narxi` + yet_counter + `" name="price" class="form-control price1" type="text" disabled>
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control calculate" id="soni` + yet_counter + `" name="yet_buyurtma_soni` + yet_counter + `" type="number">
+                                </td>
+                                <td class="col-3">
+                                    <input class="form-control umumiy" type="tel" name="umumiy" id="umumiy` + yet_counter + `" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>`)
+                // $("#filial_2").attr('disabled', 'disabled')
+        });
+    })
+</script>
+    <script>
+       
+        let message_ele = document.getElementById("message_container");
+
+        setTimeout(function(){
+           message_ele.style.display = "none";
+        }, 10000);
+        // Timeout is 1 sec, you can change it
+    </script>
+</script>
+{% endblock js %}

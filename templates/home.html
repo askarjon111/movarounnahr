@@ -1,0 +1,773 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Bosh Sahifa</title>
+{% endblock title %}
+{% block css %}
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+    <style>
+
+    .text-mute {
+        color: #ffffff !important;
+    }
+    h3 > span{
+        color: #ffffff !important;
+    }
+    .theme-primary .text-primary {
+        color : #6B778D;
+    }
+    .dark-skin h1, .dark-skin h2, .dark-skin h3, .dark-skin h4, .dark-skin h5, .dark-skin h6 {
+        color: #ffffff;
+    }
+    .text-dark {
+        color: #ffffff !important;
+    }
+    .dark-skin .table {
+        color: #ffffff;
+    }
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="box bg-transparent no-shadow b-0">
+                <div class="box-body text-center p-0">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-rounded" id="today" onclick="bugunlik()">Bugun</button>
+                        <button class="btn btn-secondary btn-rounded" id="week" onclick="haftalik()">Hafta</button>
+                        <button class="btn btn-secondary btn-rounded" id="month" onclick="oylik()">Oy</button>
+                        <input style="width: 250px;" type="text" class="btn btn-secondary btn-rounded" id="reservation">
+                        <select class="selectpicker" data-style="btn-secondary btn-outline-info" id="user">
+                                <option value="0">Barchasi</option>
+                            {% for u in users %}
+                                <option value="{{ u.id }}" data-tokens="{{ u.first_name }}">{{ u.last_name }} {{ u.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-account-plus"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Boshlang'ich</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="zeros"></span> <small
+                                    class="text-success pl-2"><i class="fa fa-caret-up"></i> <span
+                                    id="zero"></span> ta</small></h3>
+                            <h3 class="text-white mb-0 font-weight-500"><span id="zero0s"></span><small class="text-danger pl-2"><i class="fa fa-caret-down"></i> <span
+                                    id="zero0"></span> ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-account-alert"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Muhokamada</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="ones"></span> <small
+                                    class="text-success pl-2"><i class="fa fa-caret-up"></i> <span id="one"></span>
+                                ta</small></h3>
+                            <h3 class="text-white mb-0 font-weight-500"><span id="zero1s"></span><small class="text-danger pl-2"><i class="fa fa-caret-down"></i> <span
+                                    id="zero1"></span> ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-alert-outline"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Qaror qabul qilish</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="twos"></span> <small
+                                    class="text-success pl-2"><i class="fa fa-caret-up"></i> <span id="two"></span>
+                                ta</small></h3>
+                            <h3 class="text-white mb-0 font-weight-500"><span id="zero2s"></span> <small class="text-danger pl-2"><i class="fa fa-caret-down"></i> <span
+                                    id="zero2"></span> ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-book-open"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Shartnoma</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="threes"></span> <small
+                                    class="text-success pl-2"><i class="fa fa-caret-up"></i> <span
+                                    id="three"></span> ta</small></h3>
+                            <h3 class="text-white mb-0 font-weight-500"><span id="zero3s"></span> <small class="text-danger pl-2"><i class="fa fa-caret-down"></i> <span
+                                    id="zero3"></span> ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-account-minus"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Yo'qotilgan</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="fours">{{ fours }}</span> <small
+                                    class="text-danger pl-2"><i class="fa fa-caret-down"></i> <span
+                                    id="four">{{ four }}</span> ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-6">
+                <div class="box overflow-hidden pull-up hov-rs">
+                    <div class="box-body text-center">
+                        <i class="text-secondary mr-0 font-size-36 mdi mdi-account-check"></i>
+                        <div>
+                            <p class="text-mute mt-20 mb-0 font-size-16">Muvaffaqqiyatli</p>
+                            <h3 class="text-dark mb-0 font-weight-500"><span id="fives">{{ fives }}</span> <small
+                                    class="text-success pl-2"><i class="fa fa-caret-up"></i><span id="five">{{ five }}</span>
+                                ta</small></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-xl-3 col-6">
+                        <div class="box overflow-hidden pull-up hov-rs">
+                            <div class="box-body text-center">
+                                <i class="text-secondary mr-0 font-size-36 mdi mdi-table-edit"></i>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Ro'yxatga olindi</p>
+                                    <h3 class="text-dark mb-0 font-weight-500"><span id="task0">{{ task0 }}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-6">
+                        <div class="box overflow-hidden pull-up hov-rs">
+                            <div class="box-body text-center">
+                                <i class="text-secondary mr-0 font-size-36 mdi mdi-speedometer"></i>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Bajarilmoqda</p>
+                                    <h3 class="text-dark mb-0 font-weight-500"><span id="task1">{{ task1 }}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-6">
+                        <div class="box overflow-hidden pull-up hov-rs">
+                            <div class="box-body text-center">
+                                <i class="text-secondary mr-0 font-size-36 mdi mdi-check-all"></i>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">Bajarildi</p>
+                                    <h3 class="text-dark mb-0 font-weight-500"><span id="task2">{{ task2 }}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-6">
+                        <div class="box overflow-hidden pull-up hov-rs">
+                            <div class="box-body text-center">
+                                <i class="text-secondary mr-0 font-size-36 mdi mdi-delete"></i>
+                                <div>
+                                    <p class="text-mute mt-20 mb-0 font-size-16">O'chirildi</p>
+                                    <h3 class="text-dark mb-0 font-weight-500"><span id="task3">{{ task3 }}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if user.is_director == True %}
+                        <div class="col-xl-3 col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Lead</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Aktiv mijozlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Umumiy mijozlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Qarzdorlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">{{ debtor }}</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">{{ debtor_sum }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    Mijozlar oqimi
+                                </h4>
+                            </div>
+                            <div class="box-body py-0">
+                                <div id="charts_widget_43_chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                {% if user.is_director == True %}
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table no-border">
+                                        <thead>
+                                        <tr class="text-uppercase bg-lightest">
+                                            <th style="min-width: 150px"><span class="text-dark">Hodimlar</span></th>
+                                            <th style="min-width: 50px"><span class="text-dark">Soni</span></th>
+                                            <th style="min-width: 50px"><span class="text-dark">Summasi</span></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="trr">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <!-- Donut chart -->
+                      <div class="box">
+                        <div class="box-body">
+                          <div id="donut-chart" style="height: 300px;"></div>
+                        </div>
+                        <!-- /.box-body-->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12">
+                      <div class="box">
+                          <div class="box-header with-border">
+                              <div class="row pl-4">
+                                  <h4 class="box-title">Maqsad</h4> <span style="padding-left: 15px;">(mijoz soniga nisbatan)</span>
+                              </div>
+                          </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            {% for a in acc %}
+                                <div class="row">
+                                    <div class="col-6">{{ a.surname }} {{ a.name }}</div>
+                                    <div class="col-6" style="text-align: right">{{ a.foiz }}%</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="{{ a.foiz }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ a.foiz }}%">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col (right) -->
+                {% else %}
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Lead</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Aktiv mijozlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Umumiy mijozlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">0</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box overflow-hidden pull-up hov-rs">
+                                <div class="box-body text-center text-mute font-size-16 pt-3" style="padding: 0">Qarzdorlar</div>
+                                <div class="box-body">
+                                    <p class="text-mute font-size-16">Soni: <span style="float: right">{{ debtor }}</span></p>
+                                    <p class="text-mute font-size-16">Qiymati: <span style="float: right">{{ debtor_sum }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="box">
+                              <div class="box-header with-border">
+                                  <div class="row pl-4">
+                                      <h4 class="box-title">Maqsad</h4> <span style="padding-left: 15px;">(mijoz soniga nisbatan)</span>
+                                  </div>
+                              </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-6">{{ a.surname }} {{ a.name }}</div>
+                                    <div class="col-6" style="text-align: right">{{ a.foiz }}%</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="{{ a.foiz }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ a.foiz }}%">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                          </div>
+                          <!-- /.box -->
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+{% endblock content %}
+{% block js %}
+    <!-- Vendor JS -->
+    <script src="{% static 'crm/main/js/vendors.min.js' %}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js' %}"></script>
+
+	<script src="{% static 'crm/assets/vendor_components/easypiechart/dist/jquery.easypiechart.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/apexcharts-bundle/irregular-data-series.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js'%}"></script>
+
+    <script src="{% static 'crm/assets/vendor_components/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/morris.js/morris.min.js' %}"></script>
+    <script src="{% static 'crm/main/js/pages/widget-morris-charts.js' %}"></script>
+
+    <!-- Sunny Admin App -->
+    <script src="{% static 'crm/main/js/template.js' %}"></script>
+    <script src="{% static 'crm/main/js/pages/dashboard.js' %}"></script>
+    <!-- Vendor JS -->
+    <script src="{% static 'crm/assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'crm/main/js/pages/advanced-form-element.js' %}"></script>
+    <script src="{% static 'crm/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js'%}"></script>
+
+    <script src="{% static 'crm/assets/vendor_components/Flot/jquery.flot.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/Flot/jquery.flot.resize.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/Flot/jquery.flot.pie.js'%}"></script>
+	<script src="{% static 'crm/assets/vendor_components/Flot/jquery.flot.categories.js'%}"></script>
+	<script src="{% static 'crm/main/js/pages/widget-flot-charts.js'%}"></script>
+    <script>
+
+        $(document).ready(function () {
+            $(function () {
+
+                var donutData = [
+                    { label: 'Lead', data: {{ lead }}, color: 'blue' },
+                    { label: 'Yo`qotilgan', data: {{ lead0 }}, color: 'red' },
+                    { label: 'Yopilgan', data: {{ lead1 }}, color: 'green' }
+                ]
+                $.plot('#donut-chart', donutData, {
+                  series: {
+                    pie: {
+                      show       : true,
+                      radius     : 1,
+                      innerRadius: 0.3,
+                      label      : {
+                      show       : true,
+                      radius     : 1,
+                      formatter  : labelFormatter,
+                      threshold  : 0.1,
+                      background : {opacity: 0.5,color: '#000'}
+                      }
+                    }
+                  },
+                  legend: {
+                    show: true
+                  },
+                  grid: {
+                    hoverable: true,
+                    clickable: true
+                  }
+                })
+                /*
+                 * END DONUT CHART
+                 */
+
+              })
+            bugunlik()
+            $.ajax({
+                type: 'get',
+                url: `chartlead/`,
+                success: function (dt) {
+                    'use strict';
+                    var options = {
+                        series: [{
+                            name: "Lead",
+                            data: dt['zeros']
+                        },{
+                            name: "Yo'qotilgan",
+                            data: dt['fours']
+                        },{
+                            name: "Yopilgan",
+                            data: dt['fives']
+                        }],
+                        chart: {
+                            foreColor: "#bac0c7",
+                            height: 400,
+                            type: 'line',
+                            zoom: {
+                                enabled: false
+                            }
+                        },
+                        colors: ['#0F5EF7', '#ff0000', '#008000'],
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        stroke: {
+                            show: true,
+                            curve: 'smooth',
+                            lineCap: 'butt',
+                            colors: undefined,
+                            width: 5,
+                            dashArray: 0,
+                        },
+                        markers: {
+                            size: 5,
+                            colors: '#ffffff',
+                            strokeColors: '#0F5EF7',
+                            strokeWidth: 3,
+                            strokeOpacity: 0.9,
+                            strokeDashArray: 0,
+                            fillOpacity: 1,
+                            discrete: [],
+                            shape: "circle",
+                            radius: 5,
+                            offsetX: 0,
+                            offsetY: 0,
+                            onClick: undefined,
+                            onDblClick: undefined,
+                            hover: {
+                                size: undefined,
+                                sizeOffset: 3
+                            }
+                        },
+                        grid: {
+                            borderColor: '#f7f7f7',
+                            row: {
+                                colors: ['transparent'], // takes an array which will be repeated on columns
+                                opacity: 0
+                            },
+                            yaxis: {
+                                lines: {
+                                    show: true,
+                                },
+                            },
+                        },
+                        xaxis: {
+                            categories: ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyun', 'Iyul', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'],
+                            labels: {
+                                show: true,
+                            },
+                            axisBorder: {
+                                show: true
+                            },
+                            axisTicks: {
+                                show: true
+                            },
+                            tooltip: {
+                                enabled: true,
+                            },
+                        },
+                        yaxis: {
+                            labels: {
+                                show: true,
+                                formatter: function (val) {
+                                    return val;
+                                }
+                            }
+
+                        },
+                    };
+                    var chart = new ApexCharts(document.querySelector("#charts_widget_43_chart"), options);
+                    chart.render();
+                }
+            });
+
+        });
+
+        function bugunlik() {
+            d = document.getElementById('user').value;
+            $.ajax({
+                type: 'get',
+                url: `bugunlik/?id=${d}`,
+                success: function (dt) {
+                    $("#trr").empty();
+                    document.getElementById('zero').innerHTML = dt['zero'];
+                    document.getElementById('zeros').innerHTML = dt['zeros'];
+                    document.getElementById('one').innerHTML = dt['one'];
+                    document.getElementById('ones').innerHTML = dt['ones'];
+                    document.getElementById('two').innerHTML = dt['two'];
+                    document.getElementById('twos').innerHTML = dt['twos'];
+                    document.getElementById('three').innerHTML = dt['three'];
+                    document.getElementById('threes').innerHTML = dt['threes'];
+                    document.getElementById('four').innerHTML = dt['four'];
+                    document.getElementById('fours').innerHTML = dt['fours'];
+                    document.getElementById('five').innerHTML = dt['five'];
+                    document.getElementById('fives').innerHTML = dt['fives'];
+
+                    document.getElementById('task0').innerHTML = dt['task0'];
+                    document.getElementById('task1').innerHTML = dt['task1'];
+                    document.getElementById('task2').innerHTML = dt['task2'];
+                    document.getElementById('task3').innerHTML = dt['task3'];
+
+                    document.getElementById('zero0').innerHTML = dt['zero0'];
+                    document.getElementById('zero0s').innerHTML = dt['zero0s'];
+                    document.getElementById('zero1').innerHTML = dt['zero1'];
+                    document.getElementById('zero1s').innerHTML = dt['zero1s'];
+                    document.getElementById('zero2').innerHTML = dt['zero2'];
+                    document.getElementById('zero2s').innerHTML = dt['zero2s'];
+                    document.getElementById('zero3').innerHTML = dt['zero3'];
+                    document.getElementById('zero3s').innerHTML = dt['zero3s'];
+                    try{
+                        for (d of dt['users']) {
+                            var tr = `<tr>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.last_name + ` ` + d.first_name + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.count + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.summ + `
+                                    </td>
+                                </tr>`;
+                            $("#trr").append(tr);
+                        }
+                    }catch(err) {
+
+                    }
+                },
+                error: function (e) {
+                    //console.log(e);
+                }
+            });
+        }
+
+        function haftalik() {
+            d = document.getElementById('user').value;
+            $.ajax({
+                type: 'get',
+                url: `haftalik/?id=${d}`,
+                success: function (dt) {
+                    $("#trr").empty();
+                    document.getElementById('zero').innerHTML = dt['zero'];
+                    document.getElementById('zeros').innerHTML = dt['zeros'];
+                    document.getElementById('one').innerHTML = dt['one'];
+                    document.getElementById('ones').innerHTML = dt['ones'];
+                    document.getElementById('two').innerHTML = dt['two'];
+                    document.getElementById('twos').innerHTML = dt['twos'];
+                    document.getElementById('three').innerHTML = dt['three'];
+                    document.getElementById('threes').innerHTML = dt['threes'];
+                    document.getElementById('four').innerHTML = dt['four'];
+                    document.getElementById('fours').innerHTML = dt['fours'];
+                    document.getElementById('five').innerHTML = dt['five'];
+                    document.getElementById('fives').innerHTML = dt['fives'];
+
+                    document.getElementById('task0').innerHTML = dt['task0'];
+                    document.getElementById('task1').innerHTML = dt['task1'];
+                    document.getElementById('task2').innerHTML = dt['task2'];
+                    document.getElementById('task3').innerHTML = dt['task3'];
+
+                    document.getElementById('zero0').innerHTML = dt['zero0'];
+                    document.getElementById('zero0s').innerHTML = dt['zero0s'];
+                    document.getElementById('zero1').innerHTML = dt['zero1'];
+                    document.getElementById('zero1s').innerHTML = dt['zero1s'];
+                    document.getElementById('zero2').innerHTML = dt['zero2'];
+                    document.getElementById('zero2s').innerHTML = dt['zero2s'];
+                    document.getElementById('zero3').innerHTML = dt['zero3'];
+                    document.getElementById('zero3s').innerHTML = dt['zero3s'];
+                    try{
+                        for (d of dt['users']) {
+                            var tr = `<tr>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.last_name + ` ` + d.first_name + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.count + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.summ + `
+                                    </td>
+                                </tr>`;
+                            $("#trr").append(tr);
+                        }
+                    }catch(err) {
+
+                    }
+                },
+                error: function (e) {
+                    //console.log(e);
+                }
+            });
+        }
+
+        function oylik() {
+            d = document.getElementById('user').value;
+            $.ajax({
+                type: 'get',
+                url: `oylik/?id=${d}`,
+                success: function (dt) {
+                    $("#trr").empty();
+                    document.getElementById('zero').innerHTML = dt['zero'];
+                    document.getElementById('zeros').innerHTML = dt['zeros'];
+                    document.getElementById('one').innerHTML = dt['one'];
+                    document.getElementById('ones').innerHTML = dt['ones'];
+                    document.getElementById('two').innerHTML = dt['two'];
+                    document.getElementById('twos').innerHTML = dt['twos'];
+                    document.getElementById('three').innerHTML = dt['three'];
+                    document.getElementById('threes').innerHTML = dt['threes'];
+                    document.getElementById('four').innerHTML = dt['four'];
+                    document.getElementById('fours').innerHTML = dt['fours'];
+                    document.getElementById('five').innerHTML = dt['five'];
+                    document.getElementById('fives').innerHTML = dt['fives'];
+
+                    document.getElementById('task0').innerHTML = dt['task0'];
+                    document.getElementById('task1').innerHTML = dt['task1'];
+                    document.getElementById('task2').innerHTML = dt['task2'];
+                    document.getElementById('task3').innerHTML = dt['task3'];
+
+                    document.getElementById('zero0').innerHTML = dt['zero0'];
+                    document.getElementById('zero0s').innerHTML = dt['zero0s'];
+                    document.getElementById('zero1').innerHTML = dt['zero1'];
+                    document.getElementById('zero1s').innerHTML = dt['zero1s'];
+                    document.getElementById('zero2').innerHTML = dt['zero2'];
+                    document.getElementById('zero2s').innerHTML = dt['zero2s'];
+                    document.getElementById('zero3').innerHTML = dt['zero3'];
+                    document.getElementById('zero3s').innerHTML = dt['zero3s'];
+                    try{
+                        for (d of dt['users']) {
+                            var tr = `<tr>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.last_name + ` ` + d.first_name + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.count + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.summ + `
+                                    </td>
+                                </tr>`;
+                            $("#trr").append(tr);
+                        }
+                    }catch(err) {
+
+                    }
+                },
+                error: function (e) {
+                    //console.log(e);
+                }
+            });
+        }
+
+        $('#reservation').on("change", function () {
+            d = document.getElementById('user').value;
+            var date1 = $('#reservation').val().slice(0, 10);
+            var date2 = $('#reservation').val().slice(13, 24);
+            $.ajax({
+                type: 'get',
+                url: `range/?sana1=${date1}&sana2=${date2}&id=${d}`,
+                success: function (dt) {
+                    $("#trr").empty();
+                    document.getElementById('zero').innerHTML = dt['zero'];
+                    document.getElementById('zeros').innerHTML = dt['zeros'];
+                    document.getElementById('one').innerHTML = dt['one'];
+                    document.getElementById('ones').innerHTML = dt['ones'];
+                    document.getElementById('two').innerHTML = dt['two'];
+                    document.getElementById('twos').innerHTML = dt['twos'];
+                    document.getElementById('three').innerHTML = dt['three'];
+                    document.getElementById('threes').innerHTML = dt['threes'];
+                    document.getElementById('four').innerHTML = dt['four'];
+                    document.getElementById('fours').innerHTML = dt['fours'];
+                    document.getElementById('five').innerHTML = dt['five'];
+                    document.getElementById('fives').innerHTML = dt['fives'];
+
+                    document.getElementById('task0').innerHTML = dt['task0'];
+                    document.getElementById('task1').innerHTML = dt['task1'];
+                    document.getElementById('task2').innerHTML = dt['task2'];
+                    document.getElementById('task3').innerHTML = dt['task3'];
+
+                    document.getElementById('zero0').innerHTML = dt['zero0'];
+                    document.getElementById('zero0s').innerHTML = dt['zero0s'];
+                    document.getElementById('zero1').innerHTML = dt['zero1'];
+                    document.getElementById('zero1s').innerHTML = dt['zero1s'];
+                    document.getElementById('zero2').innerHTML = dt['zero2'];
+                    document.getElementById('zero2s').innerHTML = dt['zero2s'];
+                    document.getElementById('zero3').innerHTML = dt['zero3'];
+                    document.getElementById('zero3s').innerHTML = dt['zero3s'];
+                    try{
+                        for (d of dt['users']) {
+                            var tr = `<tr>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.last_name + ` ` + d.first_name + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.count + `
+                                    </td>
+                                    <td style="padding: 0.5rem;">
+                                        ` + d.summ + `
+                                    </td>
+                                </tr>`;
+                            $("#trr").append(tr);
+                        }
+                    }catch(err) {
+                    }
+                },
+                error: function (e) {
+                    //console.log(e);
+                }
+            });
+        });
+    </script>
+{% endblock js %}

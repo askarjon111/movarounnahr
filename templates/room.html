@@ -1,0 +1,274 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Bosh Sahifa</title>
+{% endblock title %}
+{% block css %}
+    <!-- Vendors Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+{% endblock css %}
+{% block content %}
+		<!-- Main content -->
+		<section class="content">
+			<style>
+				.modal {
+				  display: none;
+				  position: fixed;
+				  z-index: 1;
+				  padding-top: 100px;
+				  left: 0;
+				  top: 0;
+				  width: 100%;
+				  height: 100%;
+				  overflow: auto;
+				  background-color: rgb(0,0,0);
+				  background-color: rgba(0,0,0,0.4);
+				}
+				.start-date{
+				    height: 31px;
+    				border-radius: 3px;
+   					 border: none;
+				}
+
+
+				.modal-content {
+				height: 275px;
+				  background-color: #fefefe;
+				  margin: auto;
+				  padding: 20px;
+				  border-radius: 10px;
+				  width: 80%;
+				}
+
+				.close {
+				  color: #aaaaaa;
+				  float: right;
+				  font-size: 28px;
+				  font-weight: bold;
+				      text-align: end;
+				}
+
+				.close:hover,
+				.close:focus {
+				  color: #000;
+				  text-decoration: none;
+				  cursor: pointer;
+				}
+			</style>
+
+		  <div class="row">
+
+			<div class="col-12 col-lg-6">
+			  <div class="box">
+
+					<div class="box-header with-border">
+						<div class="row">
+							<div class="col-4"><h4 class="box-title">Bo'sh xonalar</h4></div>
+							<div class="col-4"></div>
+							{% if user.is_callcenter %}
+								<div class="col-4">
+									<select class="form-control" name="filial" onchange="getxona()" id="filial">
+										<option value="">Filialni tanlang</option>
+										{% for f in filial %}
+											<option value="{{ f.id }}">{{ f.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="table-responsive">
+					  <table class="table mb-0">
+						  <thead>
+							<tr>
+							  <th scope="col">#</th>
+							  <th scope="col">Xona</th>
+							  <th scope="col">Type</th>
+							  <th scope="col">Sig'im</th>
+							  <th scope="col">Band qilish</th>
+							</tr>
+						  </thead>
+						  <tbody id="room0">
+							{% for r in rooms0 %}
+                                <tr>
+                                  <th scope="row">{{ forloop.counter }}</th>
+                                  <td>{{ r.name }}</td>
+                                  <td>{{ r.type.name }}</td>
+                                  <td>{{ r.capacity }} kishi</td>
+                                  <td><button onclick="openModal()" id="myBtn" type="button"  class="btn btn-circle btn-success mb-5"><i class="mdi mdi-check"></i></button></td>
+                                </tr>
+							    <div id="myModal"   class="modal">
+									  <div class="modal-content">
+										<span class="close">&times;</span>
+										<form >
+											  <div class="form-group">
+												  <label>Band qilish: vaqti ... dan</label>
+												  <input class="form-control" type="datetime-local" name="sanafrom" value="Date()">
+											  </div>
+											  <div class="form-group">
+												  <label>Band qilish: vaqti ... gacha</label>
+												  <input class="form-control" type="datetime-local" name="sanato" value="Date">
+											  </div>
+											  <div class="form-group">
+												  <button type="submit" onclick="changeroom1({{ r.id }})"  class="btn btn-rounded btn-success pull-right">Buyurtma berish</button>
+											  </div>
+										</form>
+									  </div>
+								</div>
+                            {% endfor %}
+						  </tbody>
+					  </table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>
+
+            <div class="col-12 col-lg-6">
+			  <div class="box">
+				<div class="box-header with-border">
+				  <h4 class="box-title">Band xonalar</h4>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="table-responsive">
+					  <table class="table mb-0">
+						  <thead>
+							<tr>
+							  <th scope="col">#</th>
+							  <th scope="col">Xona</th>
+							  <th scope="col">Type</th>
+							  <th scope="col">Sig'im</th>
+							  <th scope="col">Bo'shatish</th>
+							</tr>
+						  </thead>
+						  <tbody id="room1">
+							{% for r in rooms1 %}
+                                <tr>
+                                  <th scope="row">{{ forloop.counter }}</th>
+                                  <td>{{ r.name }}</td>
+                                  <td>{{ r.type.name }}</td>
+                                  <td>{{ r.capacity }} kishi</td>
+                                  <td><button  type="button" onclick="changeroom0({{ r.id }})" class="btn btn-circle btn-danger mb-5"><i class="mdi mdi-close"></i></button></td>
+                                </tr>
+
+						  {% endfor %}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>
+
+		  </div>
+		  <!-- /.row -->
+
+		</section>
+		<!-- /.content -->
+
+{% endblock content %}
+
+{% block js %}
+	<!-- Vendor JS -->
+	<script src="{% static 'crm/main/js/vendors.min.js'%}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js'%}"></script>
+	<script src="{% static 'crm/main/js/template.js'%}"></script>
+	<script>
+	var modal = document.getElementById("myModal");
+
+	var btn = document.getElementById("myBtn");
+
+	var span = document.getElementsByClassName("close")[0];
+
+	function openModal () {
+	  console.log('opened')
+		modal.style.display = "block";
+	}
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
+	</script>
+    <script>
+        function getxona(){
+            id = document.getElementById('filial').value;
+            $.ajax({
+                type: 'GET',
+                url: '{% url "getxonalar" %}?id='+String(id),
+                success: function (dt){
+                    console.log(dt);
+                    console.log(dt['room0']);
+                    console.log(dt['room1']);
+                    var room0 = dt['room0'];
+                    var room1 = dt['room1'];
+                    $('#room0').empty();
+                    $('#room1').empty();
+                    var i = 1;
+                    var ii =1;
+                    for(r of room0){
+                        console.log(r.name);
+                        var tr = `<tr>
+                                      <th scope="row">` + String(i) + `</th>
+                                      <td>`+ String(r.name) +`</td>
+                                      <td>`+ String(r.type) +`</td>
+                                      <td>`+ String(r.capacity) +` kishi</td>
+                                      <td><button type="button" onclick="changeroom1(`+ String(r.id) +`)" class="btn btn-circle btn-success mb-5"><i class="mdi mdi-check"></i></button></td>
+
+                                    </tr>`;
+                        i++;
+                        $('#room0').append(tr);
+                    }
+                    for(r of room1){
+                        console.log(r.name);
+                        var tr = `<tr>
+                                      <th scope="row">` + String(ii) + `</th>
+                                      <td>`+ String(r.name) +`</td>
+                                      <td>`+ String(r.type) +`</td>
+                                      <td>`+ String(r.capacity) +` kishi</td>
+                                      <td><button type="button" onclick="changeroom0(`+ String(r.id) +`)" class="btn btn-circle btn-danger mb-5"><i class="mdi mdi-close"></i></button></td>
+
+                                    </tr>`;
+                        ii++;
+                        $('#room1').append(tr);
+                    }
+                }
+            });
+        }
+        function changeroom1(id){
+            console.log(id);
+            $.ajax({
+                type: 'GET',
+                url: '{% url "changeroom1" %}?id='+String(id),
+                success: function (){
+                    location.reload();
+                }
+            });
+        }
+        function changeroom0(id){
+            console.log(id);
+            $.ajax({
+                type: 'GET',
+                url: '{% url "changeroom0" %}?id='+String(id),
+                success: function (){
+                    location.reload();
+                }
+            });
+        }
+    </script>
+{% endblock js %}
+

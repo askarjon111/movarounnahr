@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+    <title>CRM | Board</title>
+{% endblock title %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/board/bootstrap/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/board/style.css' %}">
+
+{% endblock css %}
+{% block content %}
+    <div id="dashboard_container">
+        <div id="custom-content">
+            <div class="main_container">
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Boshlang'ich</div>
+                        <div id="info_group_1" class="group_info"></div>
+                    </div>
+                    <div id="group_body_1" class="group_body">
+                        <div id='new_lead_button'>
+                            Yangi qo'shish
+                        </div>
+                        {% for lead in group1_leads %}
+                            <div id="lead_{{ lead.id }}" pk={{ lead.id }} class="lead_card" draggable="true">
+                                <div class="lead_card-header">
+                                    <div class="lead_name text-super">{{ lead.name }}</div>
+                                    <div class="lead_date text-super">{{ lead.date|date:'Y-m-d H:i' }}</div>
+                                </div>
+                                <div class="lead_card-body">
+                                    <a class="lead_price text-super">{{ lead.price|intcomma }}</a>
+                                    <div class="lead_note text-super">{{ lead.company }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Muhokamada</div>
+                        <div id="info_group_2" class="group_info"></div>
+                    </div>
+                    <div id="group_body_2" class="group_body">
+                        {% for lead in group2_leads %}
+                            <div id="lead_{{ lead.id }}" pk={{ lead.id }} class="lead_card" draggable="true">
+                                <div class="lead_card-header">
+                                    <div class="lead_name text-super">{{ lead.name }}</div>
+                                    <div class="lead_date text-super">{{ lead.date|date:'Y-m-d H:i' }}</div>
+                                </div>
+                                <div class="lead_card-body">
+                                    <a class="lead_price text-super">{{ lead.price|intcomma }}</a>
+                                    <div class="lead_note text-super">{{ lead.company }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Qaror qabul qilish</div>
+                        <div id="info_group_3" class="group_info"></div>
+                    </div>
+                    <div id="group_body_3" class="group_body">
+                        {% for lead in group3_leads %}
+                            <div id="lead_{{ lead.id }}" pk={{ lead.id }} class="lead_card" draggable="true">
+                                <div class="lead_card-header">
+                                    <div class="lead_name text-super">{{ lead.name }}</div>
+                                    <div class="lead_date text-super">{{ lead.date|date:'Y-m-d H:i' }}</div>
+                                </div>
+                                <div class="lead_card-body">
+                                    <a class="lead_price text-super">{{ lead.price|intcomma }}</a>
+                                    <div class="lead_note text-super">{{ lead.company }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Shartnoma</div>
+                        <div id="info_group_4" class="group_info"></div>
+                    </div>
+                    <div id="group_body_4" class="group_body">
+                        {% for lead in group4_leads %}
+                            <div id="lead_{{ lead.id }}" pk={{ lead.id }} class="lead_card" draggable="true">
+                                <div class="lead_card-header">
+                                    <div class="lead_name text-super">{{ lead.name }}</div>
+                                    <div class="lead_date text-super">{{ lead.date|date:'Y-m-d H:i' }}</div>
+                                </div>
+                                <div class="lead_card-body">
+                                    <a class="lead_price text-super">{{ lead.price|intcomma }}</a>
+                                    <div class="lead_note text-super">{{ lead.company }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dashboard_footer">
+            <div class="footer_group">
+                <div id="lead_losed_footer" class="footer_item footer_losed">Yo'qotildi</div>
+                <div id="lead_woned_footer" class="footer_item footer_won">Yakunlandi</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="new_lead_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="newLeadForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Yangi qo'shish</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="p-1">
+                            <input name="form_name" type="text" placeholder="Nomi" class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+                        <div class="p-1">
+                            <input name="form_price" type="number" placeholder="0" class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+                        <div class="p-1">
+                            <input name="form_campany" type="text" placeholder="Tashkilot:nomi" class="formStyle">
+                        </div>
+                        <div class="p-1">
+                            <input name="form_address" type="text" placeholder="Tashkilot:manzil" class="formStyle">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Qo'shish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="lead_note_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="lead_note_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Izoh</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="p-1">
+                            <textarea class="formStyle" placeholder="Izoh..." name="izoh"
+                                      oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                      oninput="setCustomValidity('')" required></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="lead_finished_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="lead_finished_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Yakunlash</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-1">
+                            <input name="price" type="number" placeholder="Yakunlangan summa..." class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="lead_lose_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="lead_lose_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Yo'qotilish sababi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-1">
+                            <div class="p-1">
+                            <textarea class="formStyle" placeholder="Izoh..." name="izoh"
+                                      oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                      oninput="setCustomValidity('')" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit_lead_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="edit_lead_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Taxrirlash</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="p-1">
+                            <input name="form_name" type="text" placeholder="Nomi" class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+                        <div class="p-1">
+                            <input name="form_price" type="number" placeholder="0" class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+                        <div class="p-1">
+                            <input name="form_campany" type="text" placeholder="Tashkilot:nomi" class="formStyle">
+                        </div>
+                        <div class="p-1">
+                            <input name="form_address" type="text" placeholder="Tashkilot:manzil" class="formStyle">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'crm/main/js/vendors.min.js' %}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'crm/main/js/template.js' %}"></script>
+    <script src="{% static 'crm/board/bootstrap/script.js' %}"></script>
+    <script src="{% static 'crm/board/jquery/script.js' %}"></script>
+
+    <script>
+        let leads_all = {{ all_leads|safe }};
+        let currentUser = {{ user.id }};
+        let csrf_token = '{{ csrf_token }}'
+
+    </script>
+
+    <script src="{% static 'crm/board/script.js' %}"></script>
+{% endblock js %}

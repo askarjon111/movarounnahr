@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>CRM | Board</title>
+{% endblock title %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'crm/main/css/vendors_css.css' %}">
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'crm/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/main/css/skin_color.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/board/bootstrap/style.css' %}">
+    <link rel="stylesheet" href="{% static 'crm/task/style.css' %}">
+
+{% endblock css %}
+{% block content %}
+
+    <div id="dashboard_container">
+        <div id="custom-content">
+            <div class="main_container">
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Boshlang'ich</div>
+                        <div id="info_group_1" class="group_info"></div>
+                    </div>
+                    <div id="group_body_1" class="group_body">
+                        <div id='new_task_button'>
+                            Yangi qo'shish
+                        </div>
+                        {% for task in group1 %}
+                            <div id="task_{{ task.id }}" pk={{ task.id }} class="task_card" draggable="true">
+                                <div class="task_date text-super">{{ task.date|date:'Y-m-d H:i' }}</div>
+                                <div class="task_name">{{ task.name }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="part-group">
+                    <div class="group_header">
+                        <div class="group_title">Bajarilmoqda</div>
+                        <div id="info_group_2" class="group_info"></div>
+                    </div>
+                    <div id="group_body_2" class="group_body">
+                        {% for task in group2 %}
+                            <div id="task_{{ task.id }}" pk={{ task.id }} class="task_card" draggable="true">
+                                <div class="task_date text-super">{{ task.date|date:'Y-m-d H:i' }}</div>
+                                <div class="task_name">{{ task.name }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dashboard_footer">
+            <div class="footer_group">
+                <div id="task_delete_footer" class="footer_item footer_losed">O'chirish</div>
+                <div id="task_finished_footer" class="footer_item footer_won">Yakunlandi</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="new_task_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="newTaskForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Yangi qo'shish</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-1">
+                            <input name="form_name" type="text" placeholder="Nomi" class="formStyle"
+                                   oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                   oninput="setCustomValidity('')" required maxlength="255">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Qo'shish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="task_note_modal" class="modal fade" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="task_note_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Izoh</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-1">
+                            <textarea class="formStyle" placeholder="Izoh..." name="izoh"
+                                      oninvalid="this.setCustomValidity('To\'ldirilishi shart!')"
+                                      oninput="setCustomValidity('')" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'crm/main/js/vendors.min.js' %}"></script>
+    <script src="{% static 'crm/assets/icons/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'crm/main/js/template.js' %}"></script>
+    <script src="{% static 'crm/board/bootstrap/script.js' %}"></script>
+    <script src="{% static 'crm/board/jquery/script.js' %}"></script>
+    <script src="{% static 'crm/task/sweeatalert.js' %}"></script>
+    <script>
+        let tasks_all = {{ all_tasks|safe }};
+        let currentUser = {{ user.id }};
+        let csrf_token = '{{ csrf_token }}'
+
+    </script>
+
+    <script src="{% static 'crm/task/new.js' %}"></script>
+{% endblock js %}
